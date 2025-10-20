@@ -72,23 +72,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'plataformaResumosAPI.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+#DATABASE_URL_RENDER = 'postgresql://database_resumos_pepict_user:Fi5koWZJSmtehuQQKRB05slcFOQ0izb1@dpg-d3rb91juibrs73fqnqs0-a.oregon-postgres.render.com/database_resumos_pepict?sslmode=require'
 
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-'''
-
-DATABASE_URL_RENDER = 'postgresql://database_resumos_pepict_user:Fi5koWZJSmtehuQQKRB05slcFOQ0izb1@dpg-d3rb91juibrs73fqnqs0-a.oregon-postgres.render.com/database_resumos_pepict?sslmode=require'
-
-DATABASES = {
+'''DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL', DATABASE_URL_RENDER),
+        conn_max_age=600
+    )
+}
+'''
+DATABASES = {
+    'default': dj_database_url.config(
+        # 1. Tenta encontrar a DATABASE_URL do Render.
+        # 2. Se não encontrar (ambiente local), usa o SQLite.
+        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
         conn_max_age=600
     )
 }
