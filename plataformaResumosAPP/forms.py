@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Sua senha'})
     )
 
-    
+
 class CustomUserCreationForm(UserCreationForm):
     """
     Formulário para a criação de novos usuários, usando o modelo CustomUser.
@@ -25,7 +25,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         # Campos que o usuário deve preencher.
         # O AbstractUser já inclui username e password.
-        fields = ('username', 'email', 'nome_completo', 'user_type')
+        #fields = ('username', 'email', 'nome_completo', 'user_type')
+        fields = ('username', 'email', 'first_name', 'last_name', 'user_type')
         
     # Remove o campo user_type ou o torna um campo oculto com valor padrão
     # para que o usuário se cadastre sempre como 'AUTOR'.
