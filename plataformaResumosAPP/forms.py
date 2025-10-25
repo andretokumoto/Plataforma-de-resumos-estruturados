@@ -1,11 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm # Importa o formulário base de criação
-from .models import CustomUser # Seu modelo customizado
+from django.contrib.auth.forms import UserCreationForm 
+from .models import CustomUser 
 
 
 class LoginForm(forms.Form):
-    # Usaremos 'username' e 'password' para compatibilidade com o sistema
-    # padrão de autenticação do Django, mesmo que depois você use e-mail.
+
     username = forms.CharField(
         label='Usuário (ou E-mail)',
         max_length=150,
@@ -18,14 +17,11 @@ class LoginForm(forms.Form):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    """
-    Formulário para a criação de novos usuários, usando o modelo CustomUser.
-    """
+
     class Meta:
         model = CustomUser
         # Campos que o usuário deve preencher.
         # O AbstractUser já inclui username e password.
-        #fields = ('username', 'email', 'nome_completo', 'user_type')
         fields = ('username', 'email', 'first_name', 'last_name', 'user_type')
         
     # Remove o campo user_type ou o torna um campo oculto com valor padrão

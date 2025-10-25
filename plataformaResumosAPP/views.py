@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm # Você criará este formulário
+from .forms import LoginForm 
+
+def register(request):
+    if request.method == 'GET':
+        ...
+
 
 def login_view(request):
     if request.user.is_authenticated:
