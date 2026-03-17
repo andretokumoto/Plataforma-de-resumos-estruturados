@@ -53,12 +53,20 @@ class Projeto(models.Model):
         (3, 'Rejeitado'),
     )
 
-    usuario = models.ForeignKey(
+    '''usuario = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
         related_name='projetos',
         limit_choices_to={'tipo_usuario': 1}
-    )
+    )'''
+    usuario = models.ForeignKey(
+    Usuario,
+    on_delete=models.CASCADE,
+    related_name='projetos',
+    limit_choices_to={'tipo_usuario': 1},
+    null=True,  
+    blank=True
+)
     titulo_projeto = models.CharField(max_length=255)
     nome_autores = models.TextField()
     programa_pepict = models.CharField(max_length=255)

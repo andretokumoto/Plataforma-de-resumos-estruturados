@@ -6,7 +6,7 @@ def register(request):
     if request.method == 'GET':
         ...
 
-
+'''
 def login_view(request):
     if request.user.is_authenticated:
         # Se o usuário já estiver logado, redireciona para a home ou dashboard
@@ -39,3 +39,4 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
+    '''
