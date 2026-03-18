@@ -6,6 +6,9 @@ def register(request):
     if request.method == 'GET':
         ...
 
+def login_view(request):
+    if request.method == 'GET':
+        ...
 '''
 def login_view(request):
     if request.user.is_authenticated:
