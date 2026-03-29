@@ -1,25 +1,25 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
-class Usuario(models.Model):
+class Usuario(AbstractUser):
     TIPOS = (
         (1, 'Aluno'),
         (2, 'Professor'),
         (3, 'Coordenador'),
     )
 
-    nome_usuario = models.CharField(max_length=255)
-    email_usuario = models.EmailField(unique=True)
     tipo_usuario = models.IntegerField(choices=TIPOS)
-    ra = models.IntegerField(null=True, blank=True, verbose_name='RA')
+    ra = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.nome_usuario
+        return self.username
 
 
 class Semestre(models.Model):
     ano = models.CharField(max_length=4)
     semestre = models.IntegerField()
+
     coordenador = models.ForeignKey(
         Usuario,
         on_delete=models.PROTECT,
@@ -38,6 +38,7 @@ class Turma(models.Model):
         related_name='turmas_responsavel',
         limit_choices_to={'tipo_usuario': 2}
     )
+
     codigo_acesso = models.CharField(max_length=20, unique=True)
     nome_turma = models.CharField(max_length=100)
 
@@ -53,29 +54,31 @@ class Projeto(models.Model):
         (3, 'Rejeitado'),
     )
 
-    '''usuario = models.ForeignKey(
+    aluno = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
         related_name='projetos',
         limit_choices_to={'tipo_usuario': 1}
-    )'''
-    usuario = models.ForeignKey(
-    Usuario,
-    on_delete=models.CASCADE,
-    related_name='projetos',
-    limit_choices_to={'tipo_usuario': 1},
-    null=True,  
-    blank=True
-)
+    )
+
+    professor_responsavel = models.ForeignKey(
+        Usuario,
+        on_delete=models.PROTECT,
+        related_name='projetos_orientados',
+        limit_choices_to={'tipo_usuario': 2}
+    )
+
     titulo_projeto = models.CharField(max_length=255)
     nome_autores = models.TextField()
     programa_pepict = models.CharField(max_length=255)
+
     objetivos_trabalho = models.TextField()
     metodologia_projeto = models.TextField()
     resultados_projeto = models.TextField()
     ods_projeto = models.CharField(max_length=255)
     reflexao_projeto = models.TextField()
     referencia_projeto = models.TextField()
+
     status_projeto = models.IntegerField(choices=STATUS, default=0)
 
     def __str__(self):
@@ -89,13 +92,15 @@ class Submissao(models.Model):
         (2, 'Rejeitado'),
     )
 
-    resultado_submissao = models.IntegerField(choices=RESULTADOS, default=0)
     projeto = models.ForeignKey(
         Projeto,
         on_delete=models.CASCADE,
         related_name='submissoes'
     )
+
+    resultado_submissao = models.IntegerField(choices=RESULTADOS, default=0)
     feedback = models.TextField(null=True, blank=True)
+
     data_submissao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -103,7 +108,8 @@ class Submissao(models.Model):
 
 
 class Revista(models.Model):
-    revista_publicada = models.CharField(max_length=255)
+    titulo = models.CharField(max_length=255)
+
     semestre = models.ForeignKey(
         Semestre,
         on_delete=models.CASCADE,
@@ -111,7 +117,7 @@ class Revista(models.Model):
     )
 
     def __str__(self):
-        return self.revista_publicada
+        return self.titulo
 
 
 class ProjetoPorTurma(models.Model):
@@ -120,11 +126,13 @@ class ProjetoPorTurma(models.Model):
         on_delete=models.CASCADE,
         related_name='vinculos_turma'
     )
+
     turma = models.ForeignKey(
         Turma,
         on_delete=models.CASCADE,
         related_name='projetos_turma'
     )
+
     aluno = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
@@ -133,20 +141,21 @@ class ProjetoPorTurma(models.Model):
     )
 
     class Meta:
+        unique_together = ('projeto', 'turma', 'aluno')
         verbose_name = 'Projeto por turma'
         verbose_name_plural = 'Projetos por turma'
-        unique_together = ('projeto', 'turma', 'aluno')
 
     def __str__(self):
-        return f'{self.aluno.nome_usuario} - {self.projeto.titulo_projeto} - {self.turma.nome_turma}'
+        return f'{self.aluno.username} - {self.projeto.titulo_projeto} - {self.turma.nome_turma}'
 
 
 class ProjetosSelecionados(models.Model):
-    submissao_aceita = models.ForeignKey(
+    submissao = models.ForeignKey(
         Submissao,
         on_delete=models.CASCADE,
         related_name='selecoes_revista'
     )
+
     revista = models.ForeignKey(
         Revista,
         on_delete=models.CASCADE,
@@ -154,9 +163,9 @@ class ProjetosSelecionados(models.Model):
     )
 
     class Meta:
+        unique_together = ('submissao', 'revista')
         verbose_name = 'Projeto selecionado'
         verbose_name_plural = 'Projetos selecionados'
-        unique_together = ('submissao_aceita', 'revista')
 
     def __str__(self):
-        return f'{self.submissao_aceita} -> {self.revista.revista_publicada}'
+        return f'{self.submissao} -> {self.revista.titulo}'
