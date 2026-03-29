@@ -28,17 +28,22 @@ class UsuarioCreationForm(UserCreationForm):
 
     class Meta:
         model = Usuario
-        fields = ('username', 'email', 'first_name', 'last_name', 'tipo_usuario', 'ra')
-
+        fields = ('username', 'email', 'first_name', 'last_name', 'ra')
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # suário se cadastra como ALUNO
-        self.initial['tipo_usuario'] = 1
-        self.fields['tipo_usuario'].widget = forms.HiddenInput()
-
-       
         for field_name in ['username', 'email', 'first_name', 'last_name', 'ra']:
             self.fields[field_name].widget.attrs.update({
                 'class': 'form-control'
             })
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        user.tipo_usuario = 1
+
+        if commit:
+            user.save()
+
+        return user

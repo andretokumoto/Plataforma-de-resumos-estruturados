@@ -74,6 +74,8 @@ WSGI_APPLICATION = 'plataformaResumosAPI.wsgi.application'
 
 AUTH_USER_MODEL = 'plataformaResumosAPP.Usuario'
 
+AUTH_PASSWORD_VALIDATORS = []
+
 #DATABASE_URL_RENDER = 'postgresql://database_resumos_pepict_user:Fi5koWZJSmtehuQQKRB05slcFOQ0izb1@dpg-d3rb91juibrs73fqnqs0-a.oregon-postgres.render.com/database_resumos_pepict?sslmode=require'
 
 '''DATABASES = {
