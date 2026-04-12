@@ -3,14 +3,26 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Usuario(AbstractUser):
+
+    ALUNO = 1
+    PROFESSOR = 2
+    COORDENADOR = 3
+
     TIPOS = (
-        (1, 'Aluno'),
-        (2, 'Professor'),
-        (3, 'Coordenador'),
+        (ALUNO, 'Aluno'),
+        (PROFESSOR, 'Professor'),
+        (COORDENADOR, 'Coordenador'),
     )
 
-    tipo_usuario = models.IntegerField(choices=TIPOS)
-    ra = models.IntegerField(null=True, blank=True)
+    tipo_usuario = models.IntegerField(
+        choices=TIPOS,
+        default=ALUNO
+    )
+
+    ra = models.IntegerField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.username
