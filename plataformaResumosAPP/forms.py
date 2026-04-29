@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from .models import Turma
 
 Usuario = get_user_model()
 
@@ -47,3 +48,39 @@ class UsuarioCreationForm(UserCreationForm):
             user.save()
 
         return user
+    
+
+    
+class CriacaoTurma(forms.ModelForm):
+
+    class Meta:
+
+        model = Turma
+
+        fields = (
+            'nome_turma',
+            'disciplina',
+            'curso',
+        )
+
+        labels = {
+            'nome_turma': 'Nome da Turma',
+            'disciplina': 'Unidade Curricular',
+            'curso': 'Curso Graduação',
+        }
+
+        widgets = {
+
+            'nome_turma': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+
+            'disciplina': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+
+            'curso': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+
+        }
