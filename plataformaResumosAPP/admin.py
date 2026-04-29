@@ -1,51 +1,213 @@
 from django.contrib import admin
+
 from .models import (
     Usuario,
+    Semestre,
+    Programa,
+    ODS,
+    Turma,
+    Inscricao,
     Projeto,
     Submissao,
     Revista,
-    Turma,
-    Semestre,
-    ProjetoPorTurma,
-    ProjetosSelecionados
+    ProjetoRevista
 )
+
 
 
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'tipo_usuario', 'ra')
 
+    list_display = (
+        'username',
+        'email',
+        'tipo_usuario',
+        'is_staff',
+    )
 
-@admin.register(Projeto)
-class ProjetoAdmin(admin.ModelAdmin):
-    list_display = ('titulo_projeto', 'aluno', 'professor_responsavel', 'status_projeto')
+    list_filter = (
+        'tipo_usuario',
+        'is_staff',
+    )
 
+    search_fields = (
+        'username',
+        'email',
+        'ra',
+    )
 
-@admin.register(Submissao)
-class SubmissaoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'projeto', 'resultado_submissao', 'data_submissao')
-
-
-@admin.register(Revista)
-class RevistaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'semestre')
-
-
-@admin.register(Turma)
-class TurmaAdmin(admin.ModelAdmin):
-    list_display = ('nome_turma', 'responsavel', 'codigo_acesso')
 
 
 @admin.register(Semestre)
 class SemestreAdmin(admin.ModelAdmin):
-    list_display = ('ano', 'semestre', 'coordenador')
+
+    list_display = (
+        'ano',
+        'semestre',
+        'coordenador',
+    )
+
+    list_filter = (
+        'ano',
+        'semestre',
+    )
 
 
-@admin.register(ProjetoPorTurma)
-class ProjetoPorTurmaAdmin(admin.ModelAdmin):
-    list_display = ('projeto', 'turma', 'aluno')
+
+@admin.register(Programa)
+class ProgramaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'nome',
+    )
+
+    search_fields = (
+        'nome',
+    )
 
 
-@admin.register(ProjetosSelecionados)
-class ProjetosSelecionadosAdmin(admin.ModelAdmin):
-    list_display = ('submissao', 'revista')
+
+@admin.register(ODS)
+class ODSAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'numero',
+        'nome',
+    )
+
+    ordering = (
+        'numero',
+    )
+
+    search_fields = (
+        'nome',
+    )
+
+
+
+@admin.register(Turma)
+class TurmaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'nome_turma',
+        'disciplina',
+        'curso',
+        'semestre',
+        'responsavel',
+        'codigo_acesso',
+    )
+
+    list_filter = (
+        'semestre',
+        'curso',
+        'disciplina',
+    )
+
+    search_fields = (
+        'nome_turma',
+        'disciplina',
+        'codigo_acesso',
+    )
+
+
+
+@admin.register(Inscricao)
+class InscricaoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'aluno',
+        'turma',
+        'data_inscricao',
+    )
+
+    list_filter = (
+        'turma',
+    )
+
+    search_fields = (
+        'aluno__username',
+    )
+
+
+
+class SubmissaoInline(admin.TabularInline):
+
+    model = Submissao
+
+    extra = 0
+
+    readonly_fields = (
+        'data_submissao',
+    )
+
+
+
+@admin.register(Projeto)
+class ProjetoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'titulo_projeto',
+        'aluno',
+        'turma',
+        'programa',
+        'status_projeto',
+    )
+
+    list_filter = (
+        'status_projeto',
+        'turma',
+        'programa',
+    )
+
+    search_fields = (
+        'titulo_projeto',
+        'aluno__username',
+    )
+
+    filter_horizontal = (
+        'ods',
+    )
+
+    inlines = [
+        SubmissaoInline
+    ]
+
+
+
+class ProjetoRevistaInline(admin.TabularInline):
+
+    model = ProjetoRevista
+
+    extra = 0
+
+
+
+@admin.register(Revista)
+class RevistaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'titulo',
+        'semestre',
+        'data_criacao',
+    )
+
+    list_filter = (
+        'semestre',
+    )
+
+    inlines = [
+        ProjetoRevistaInline
+    ]
+
+
+@admin.register(ProjetoRevista)
+class ProjetoRevistaAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'revista',
+        'projeto',
+    )
+
+    list_filter = (
+        'revista',
+    )
