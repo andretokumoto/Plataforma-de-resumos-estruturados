@@ -1,10 +1,13 @@
+import random
+import string
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, UsuarioCreationForm
+from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from .models import Turma, Semestre
 
 User = get_user_model()
 
@@ -115,3 +118,73 @@ def dashboard_coordenador(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def gerar_codigo_unico():
+
+    while True:
+
+        codigo = ''.join(
+            random.choices(
+                string.ascii_uppercase + string.digits,
+                k=6
+            )
+        )
+
+        if not Turma.objects.filter(
+            codigo_acesso=codigo
+        ).exists():
+
+            return codigo
+        
+
+@login_required
+def dashboard_professor(request):
+
+    if request.user.tipo_usuario != 2:
+        return HttpResponseForbidden()
+
+    return render(request, 'professor/dashboard_professor.html')
+
+@login_required
+def criar_turma_view(request):
+
+
+    if request.user.tipo_usuario != 2:
+        return HttpResponseForbidden()
+
+    try:
+        semestre_ativo = Semestre.objects.latest('id')
+
+    except Semestre.DoesNotExist:
+        return HttpResponseForbidden(
+            "Nenhum semestre cadastrado."
+        )
+
+    if request.method == 'POST':
+
+        form = CriacaoTurma(request.POST)
+
+        if form.is_valid():
+
+            turma = form.save(commit=False)
+
+            turma.responsavel = request.user
+
+            turma.semestre = semestre_ativo
+
+            turma.codigo_acesso = gerar_codigo_unico()
+
+            turma.save()
+
+            return redirect('dashboard_professor')
+
+    else:
+
+        form = CriacaoTurma()
+
+    return render(
+        request,
+        'professor/criar_turma.html',
+        {'form': form}
+    )

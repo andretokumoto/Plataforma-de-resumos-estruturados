@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view 
+from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view
 
 urlpatterns = [
 
@@ -25,5 +25,11 @@ urlpatterns = [
         'coordenador/',
         dashboard_coordenador,
         name='dashboard_coordenador'
+    ),
+
+    path(
+        'criarturma/',
+        criar_turma_view,
+        name='criar_turma'
     ),
 ]
