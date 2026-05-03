@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .models import Turma, Inscricao
+from .models import Turma, Programa, Projeto, ODS
 
 Usuario = get_user_model()
 
@@ -89,3 +89,31 @@ class CriacaoTurma(forms.ModelForm):
             ),
 
         }
+
+class ProjetoForm(forms.ModelForm):
+    class Meta:
+        model = Projeto
+        fields = [
+            'titulo_projeto', 'programa', 'ods', 'nome_autores', 
+            'objetivos_trabalho', 'metodologia_projeto', 'resultados_projeto', 
+            'justificativa_ods', 'reflexao_projeto', 'referencia_projeto'
+        ]
+        widgets = {
+  
+            'programa': forms.CheckboxSelectMultiple(),
+            'ods': forms.CheckboxSelectMultiple(),
+            
+            'objetivos_trabalho': forms.Textarea(attrs={'rows': 3}),
+            'metodologia_projeto': forms.Textarea(attrs={'rows': 3}),
+            'resultados_projeto': forms.Textarea(attrs={'rows': 3}),
+            'justificativa_ods': forms.Textarea(attrs={'rows': 3}),
+            'reflexao_projeto': forms.Textarea(attrs={'rows': 3}),
+        }
+
+    def clean_ods(self):
+        ods_selecionadas = self.cleaned_data.get('ods')
+        quantidade = ods_selecionadas.count()
+        
+        if quantidade < 1 or quantidade > 3:
+            raise forms.ValidationError("Você deve selecionar entre 1 e 3 ODS.")
+        return ods_selecionadas

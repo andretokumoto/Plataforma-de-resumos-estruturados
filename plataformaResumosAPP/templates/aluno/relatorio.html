@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Relatório - {{ projeto.turma.nome_turma }}</title>
+    <title>Relatório de Projeto</title>
 </head>
 <body>
+    <h1>Edição de Relatório</h1>
 
-    <h1>Relatório do Projeto</h1>
-    
-    <p><strong>Projeto:</strong> {{ projeto.titulo_projeto }}</p>
-    <p><strong>Aluno:</strong> {{ projeto.aluno.username }}</p>
-    <p><strong>Turma:</strong> {{ projeto.turma.nome_turma }}</p>
-  
+    {% if messages %}
+        {% for message in messages %}
+            <p><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
 
-    <hr>
-    
-    <a href="{% url 'dashboard_aluno' %}">Voltar ao Início</a>
+    <form method="POST">
+        {% csrf_token %}
 
+        <p>Título: {{ form.titulo_projeto }}</p>
+
+        <p><strong>Programas (Selecione):</strong><br>
+        {{ form.programa }}</p>
+
+        <p><strong>ODS (Selecione de 1 a 3):</strong><br>
+        {{ form.ods }}
+        {% if form.ods.errors %}
+            <span style="color: red;">{{ form.ods.errors }}</span>
+        {% endif %}
+        </p>
+
+        <p>Autores: {{ form.nome_autores }}</p>
+        <p>Objetivos:<br>{{ form.objetivos_trabalho }}</p>
+        <p>Metodologia:<br>{{ form.metodologia_projeto }}</p>
+        <p>Resultados:<br>{{ form.resultados_projeto }}</p>
+        <p>Justificativa ODS:<br>{{ form.justificativa_ods }}</p>
+        <p>Reflexão:<br>{{ form.reflexao_projeto }}</p>
+        <p>Referências:<br>{{ form.referencia_projeto }}</p>
+
+        <button type="submit">Salvar Relatório</button>
+    </form>
+
+    <a href="{% url 'dashboard_aluno' %}">Voltar</a>
 </body>
 </html>

@@ -151,7 +151,6 @@ class Inscricao(models.Model):
 
 
 class Projeto(models.Model):
-
     STATUS = (
         (0, 'Rascunho'),
         (1, 'Em análise'),
@@ -165,16 +164,14 @@ class Projeto(models.Model):
         related_name='projetos',
         limit_choices_to={'tipo_usuario': 1}
     )
-
     turma = models.ForeignKey(
         Turma,
         on_delete=models.CASCADE,
         related_name='projetos'
     )
 
-    programa = models.ForeignKey(
+    programa = models.ManyToManyField(
         Programa,
-        on_delete=models.PROTECT,
         related_name='projetos'
     )
 
@@ -183,38 +180,22 @@ class Projeto(models.Model):
         related_name='projetos'
     )
 
-    titulo_projeto = models.CharField(
-        max_length=255
-    )
-
+    titulo_projeto = models.CharField(max_length=255)
     nome_autores = models.TextField()
-
     objetivos_trabalho = models.TextField()
-
     metodologia_projeto = models.TextField()
-
     resultados_projeto = models.TextField()
-
     justificativa_ods = models.TextField()
-
     reflexao_projeto = models.TextField()
-
-    referencia_projeto = models.TextField(
-        null=True,
-        blank=True
-    )
-
+    referencia_projeto = models.TextField(null=True, blank=True)
+    
     status_projeto = models.IntegerField(
         choices=STATUS,
         default=0
     )
 
     class Meta:
-
-        unique_together = (
-            'aluno',
-            'turma'
-        )
+        unique_together = ('aluno', 'turma')
 
     def __str__(self):
         return self.titulo_projeto

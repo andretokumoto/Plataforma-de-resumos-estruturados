@@ -2,12 +2,12 @@ import random
 import string
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma
+from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma, ProjetoForm
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import Turma, Semestre, Inscricao, Projeto, Programa
+from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS
 from django.db import IntegrityError
 
 User = get_user_model()
@@ -218,30 +218,40 @@ def inscrever_em_turma_view(request):
 
 @login_required
 def relatorio_view(request, inscricao_id):
-   
+
     inscricao = get_object_or_404(Inscricao, id=inscricao_id, aluno=request.user)
+
+    prog1, _ = Programa.objects.get_or_create(nome="Educação e Sustentabilidade")
+    prog2, _ = Programa.objects.get_or_create(nome="Tecnologia e Inovação para o Desenvolvimento Social")
     
-  
-    programa_padrao, _ = Programa.objects.get_or_create(
-        nome="Educação e Sustentabilidade"
-    )
-    Programa.objects.get_or_create(
-        nome="Tecnologia e Inovação para o Desenvolvimento Social"
-    )
-    
+    for i in range(1, 18):
+        ODS.objects.get_or_create(numero=i, defaults={'nome': f'Objetivo de Desenvolvimento Sustentável {i}'})
+
     projeto, criado = Projeto.objects.get_or_create(
         aluno=request.user,
         turma=inscricao.turma,
         defaults={
-            'programa': programa_padrao,
             'titulo_projeto': f"Projeto - {inscricao.turma.nome_turma}",
             'nome_autores': request.user.get_full_name() or request.user.username,
-            'objetivos_trabalho': 'A definir', 
-            'metodologia_projeto': 'A definir',
-            'resultados_projeto': 'A definir',
-            'justificativa_ods': 'A definir',
-            'reflexao_projeto': 'A definir',
         }
     )
 
-    return render(request, "aluno/relatorio.html", {"projeto": projeto})
+    if criado:
+        projeto.programa.add(prog1)
+
+    if request.method == 'POST':
+        form = ProjetoForm(request.POST, instance=projeto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Dados do relatório salvos com sucesso!")
+            return redirect('relatorio_projeto', inscricao_id=inscricao.id)
+        else:
+            messages.error(request, "Erro ao salvar. Verifique os campos (ODS: mínimo 1, máximo 3).")
+    else:
+ 
+        form = ProjetoForm(instance=projeto)
+
+    return render(request, "aluno/relatorio.html", {
+        "projeto": projeto,
+        "form": form
+    })
