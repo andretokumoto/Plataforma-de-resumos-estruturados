@@ -1,13 +1,13 @@
 import random
 import string
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import Turma, Semestre, Inscricao
+from .models import Turma, Semestre, Inscricao, Projeto, Programa
 from django.db import IntegrityError
 
 User = get_user_model()
@@ -92,12 +92,11 @@ def cadastro_view(request):
 
 @login_required
 def dashboard_aluno(request):
-
     if request.user.tipo_usuario != 1:
         return HttpResponseForbidden()
-
-    return render(request, 'aluno/dashboard_aluno.html')
-
+    
+    lista_inscricoes = Inscricao.objects.filter(aluno=request.user)
+    return render(request, 'aluno/dashboard_aluno.html', {'lista_inscricoes': lista_inscricoes})
 
 @login_required
 def dashboard_professor(request):
@@ -190,44 +189,59 @@ def criar_turma_view(request):
         {'form': form}
     )
 
+
 @login_required
 def inscrever_em_turma_view(request):
-    
-
     if request.method == 'POST':
-
         form = InscricaoEmTurma(request.POST)
-
         if form.is_valid():
-
             codigo_acesso = form.cleaned_data['codigo_acesso']
-            aluno = request.user
-
             try:
+                turma_requerida = Turma.objects.get(codigo_acesso=codigo_acesso)
+                
+                
+                if Inscricao.objects.filter(aluno=request.user, turma=turma_requerida).exists():
+                    return render(request, "aluno/ja_incrito.html", {
+                        "mensagem": "Você já está matriculado nesta turma."
+                    })
 
-                turma_requerida = Turma.objects.get(codigo_acesso = codigo_acesso)
+                
+                Inscricao.objects.create(aluno=request.user, turma=turma_requerida)
+                return redirect('dashboard_aluno')
 
-                matricula = Inscricao.objects.create(
-                    aluno = aluno,
-                    turma = turma_requerida
-                )
-
-                return render(request, "aluno/relatorio.html", {
-                    "mensagem": "Inscrição realizada com sucesso!"
-                })
-            
-
-
-            except Inscricao.DoesNotExist:
-                return HttpResponseForbidden(
-                    "Nenhum semestre cadastrado."
-                )
-            
-            except IntegrityError:
-                return render(request, "aluno/ja_incrito.html", {
-                    "mensagem": "Você já está inscrito nessa turma"
-                })
+            except Turma.DoesNotExist:
+                messages.error(request, "Código de turma inválido.")
     else:
         form = InscricaoEmTurma()
-
     return render(request, "aluno/inscricao_turma.html", {"form": form})
+
+
+@login_required
+def relatorio_view(request, inscricao_id):
+   
+    inscricao = get_object_or_404(Inscricao, id=inscricao_id, aluno=request.user)
+    
+  
+    programa_padrao, _ = Programa.objects.get_or_create(
+        nome="Educação e Sustentabilidade"
+    )
+    Programa.objects.get_or_create(
+        nome="Tecnologia e Inovação para o Desenvolvimento Social"
+    )
+    
+    projeto, criado = Projeto.objects.get_or_create(
+        aluno=request.user,
+        turma=inscricao.turma,
+        defaults={
+            'programa': programa_padrao,
+            'titulo_projeto': f"Projeto - {inscricao.turma.nome_turma}",
+            'nome_autores': request.user.get_full_name() or request.user.username,
+            'objetivos_trabalho': 'A definir', 
+            'metodologia_projeto': 'A definir',
+            'resultados_projeto': 'A definir',
+            'justificativa_ods': 'A definir',
+            'reflexao_projeto': 'A definir',
+        }
+    )
+
+    return render(request, "aluno/relatorio.html", {"projeto": projeto})

@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Relatorio PEPICT</title>
+    <title>Relatório - {{ projeto.turma.nome_turma }}</title>
 </head>
-
 <body>
 
-    <h1>tela de relatorio</h1>
+    <h1>Relatório do Projeto</h1>
+    
+    <p><strong>Projeto:</strong> {{ projeto.titulo_projeto }}</p>
+    <p><strong>Aluno:</strong> {{ projeto.aluno.username }}</p>
+    <p><strong>Turma:</strong> {{ projeto.turma.nome_turma }}</p>
+  
 
-    <p>aqui vai ter relatorio.</p>
-
-
-    <a href="{% url 'dashboard_aluno' %}">
-        <button type="button">
-            voltar ao inicio
-        </button>
-    </a>
-
-    <a href="{% url 'logout' %}">
-        <button type="button">
-            Logout
-        </button>
-    </a>
+    <hr>
+    
+    <a href="{% url 'dashboard_aluno' %}">Voltar ao Início</a>
 
 </body>
 </html>

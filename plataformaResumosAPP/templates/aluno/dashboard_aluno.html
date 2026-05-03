@@ -3,24 +3,30 @@
 <head>
     <title>Dashboard Aluno</title>
 </head>
-
 <body>
+    <h1>Painel do Aluno</h1>
+    <p>Você está logado como: {{ request.user.username }}</p>
 
-    <h1>Login de Aluno</h1>
+    <h3>Minhas Inscrições e Projetos</h3>
 
-    <p>Você está logado como Aluno.</p>
 
+    <ul>
+        {% for inscricao in lista_inscricoes %}
+            <li>
+                {{ inscricao.turma.nome_turma }}
+                <a href="{% url 'relatorio_projeto' inscricao.id %}">Acessar Relatório</a>
+            </li>
+        {% empty %}
+            <li>Nenhuma inscrição encontrada.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
     <a href="{% url 'inscrever_em_turma' %}">
-        <button type="button">
-            inscrever-se em um turma
-        </button>
+        <button type="button">Inscrever-se em uma turma</button>
     </a>
-
     <a href="{% url 'logout' %}">
-        <button type="button">
-            Logout
-        </button>
+        <button type="button">Logout</button>
     </a>
-
 </body>
 </html>
