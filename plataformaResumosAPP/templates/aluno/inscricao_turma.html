@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscrição em Turma</title>
+</head>
+<body>
+
+    <h1>Inscrição em Turma</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+
+        <button type="submit">Inscrever-se</button>
+    </form>
+
+    <a href="{% url 'dashboard_aluno' %}">
+        <button type="button">
+            voltar ao inicio
+        </button>
+    </a>
+
+</body>
+</html>

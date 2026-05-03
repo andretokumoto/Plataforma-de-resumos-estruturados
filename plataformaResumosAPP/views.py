@@ -2,12 +2,13 @@ import random
 import string
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma
+from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import Turma, Semestre
+from .models import Turma, Semestre, Inscricao
+from django.db import IntegrityError
 
 User = get_user_model()
 
@@ -188,3 +189,45 @@ def criar_turma_view(request):
         'professor/criar_turma.html',
         {'form': form}
     )
+
+@login_required
+def inscrever_em_turma_view(request):
+    
+
+    if request.method == 'POST':
+
+        form = InscricaoEmTurma(request.POST)
+
+        if form.is_valid():
+
+            codigo_acesso = form.cleaned_data['codigo_acesso']
+            aluno = request.user
+
+            try:
+
+                turma_requerida = Turma.objects.get(codigo_acesso = codigo_acesso)
+
+                matricula = Inscricao.objects.create(
+                    aluno = aluno,
+                    turma = turma_requerida
+                )
+
+                return render(request, "aluno/relatorio.html", {
+                    "mensagem": "Inscrição realizada com sucesso!"
+                })
+            
+
+
+            except Inscricao.DoesNotExist:
+                return HttpResponseForbidden(
+                    "Nenhum semestre cadastrado."
+                )
+            
+            except IntegrityError:
+                return render(request, "aluno/ja_incrito.html", {
+                    "mensagem": "Você já está inscrito nessa turma"
+                })
+    else:
+        form = InscricaoEmTurma()
+
+    return render(request, "aluno/inscricao_turma.html", {"form": form})

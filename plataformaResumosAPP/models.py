@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# ==========================================
-# USUÁRIO
-# ==========================================
 
 class Usuario(AbstractUser):
 
@@ -30,9 +27,6 @@ class Usuario(AbstractUser):
         return self.username
 
 
-# ==========================================
-# SEMESTRE
-# ==========================================
 
 class Semestre(models.Model):
 
@@ -59,9 +53,7 @@ class Semestre(models.Model):
         return f'{self.ano}/{self.semestre}'
 
 
-# ==========================================
-# PROGRAMA PEPICT
-# ==========================================
+
 
 class Programa(models.Model):
 
@@ -74,9 +66,7 @@ class Programa(models.Model):
         return self.nome
 
 
-# ==========================================
-# ODS (Objetivos da ONU)
-# ==========================================
+
 
 class ODS(models.Model):
 
@@ -92,9 +82,6 @@ class ODS(models.Model):
         return f'ODS {self.numero} - {self.nome}'
 
 
-# ==========================================
-# TURMA
-# ==========================================
 
 class Turma(models.Model):
 
@@ -132,9 +119,6 @@ class Turma(models.Model):
         return f'{self.nome_turma} - {self.disciplina} ({self.semestre})'
 
 
-# ==========================================
-# INSCRIÇÃO (Aluno entra na turma)
-# ==========================================
 
 class Inscricao(models.Model):
 
@@ -165,10 +149,6 @@ class Inscricao(models.Model):
     def __str__(self):
         return f'{self.aluno} - {self.turma}'
 
-
-# ==========================================
-# PROJETO
-# ==========================================
 
 class Projeto(models.Model):
 
@@ -240,10 +220,6 @@ class Projeto(models.Model):
         return self.titulo_projeto
 
 
-# ==========================================
-# SUBMISSÃO
-# ==========================================
-
 class Submissao(models.Model):
 
     RESULTADOS = (
@@ -276,9 +252,6 @@ class Submissao(models.Model):
         return f'Submissão #{self.id}'
 
 
-# ==========================================
-# REVISTA (UMA POR SEMESTRE)
-# ==========================================
 
 class Revista(models.Model):
 
@@ -299,10 +272,6 @@ class Revista(models.Model):
     def __str__(self):
         return f'{self.titulo} - {self.semestre}'
 
-
-# ==========================================
-# PROJETOS NA REVISTA
-# ==========================================
 
 class ProjetoRevista(models.Model):
 

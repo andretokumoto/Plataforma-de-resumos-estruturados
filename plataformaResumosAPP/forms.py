@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .models import Turma
+from .models import Turma, Inscricao
 
 Usuario = get_user_model()
 
@@ -50,6 +50,11 @@ class UsuarioCreationForm(UserCreationForm):
         return user
     
 
+class InscricaoEmTurma(forms.Form):
+    codigo_acesso = forms.CharField(
+        max_length=20,
+        label="Código de acesso"
+    )
     
 class CriacaoTurma(forms.ModelForm):
 
