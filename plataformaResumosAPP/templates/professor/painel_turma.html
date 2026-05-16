@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Painel da Turma</title>
+</head>
+<body>
+    <h1>{{ turma.nome_turma }}</h1>
+
+    <p>
+        <strong>Disciplina:</strong> {{ turma.disciplina }} <br>
+        <strong>Curso:</strong> {{ turma.curso }}
+    </p>
+
+    <h2>Projetos Submetidos</h2>
+
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Título do Projeto</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for projeto in projetos %}
+                <tr>
+                    <td>
+                        {{ projeto.aluno.get_full_name|default:projeto.aluno.username }}
+                    </td>
+                    <td>{{ projeto.titulo_projeto }}</td>
+                    <td>{{ projeto.get_status_projeto_display }}</td>
+
+                    <a href="{% url 'projeto_analise'%}">Entrar</a>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">
+                        Nenhum projeto encontrado para esta turma.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <a href="{% url 'dashboard_professor' %}">
+        Voltar ao Dashboard
+    </a>
+</body>
+</html>

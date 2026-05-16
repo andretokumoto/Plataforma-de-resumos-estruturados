@@ -10,6 +10,22 @@
 
     <p>Você está logado como Professor.</p>
 
+
+    <ul>
+        {% for turma in lista_turmas %}
+            <li>
+                {{ turma.nome_turma }}
+                    <strong> (Código da turma: {{turma.codigo_acesso}}) </strong>
+
+                <a href="{% url 'painel_turma' turma.pk %}">Entrar</a>
+
+            </li>
+        {% empty %}
+            <li>Nenhuma turma encontrada.</li>
+        {% endfor %}
+    </ul>
+
+
     <br>
 
     <a href="{% url 'criar_turma' %}">

@@ -78,7 +78,7 @@ def dashboard_aluno(request):
     if request.user.tipo_usuario != 1:
         return HttpResponseForbidden()
     
-    # Busca as inscrições exatamente como no seu código original
+   
     lista_inscricoes = Inscricao.objects.filter(aluno=request.user)
     
 
@@ -94,7 +94,11 @@ def dashboard_aluno(request):
 def dashboard_professor(request):
     if request.user.tipo_usuario != 2:
         return HttpResponseForbidden()
-    return render(request, 'professor/dashboard_professor.html')
+    
+    lista_turmas = Turma.objects.filter(responsavel=request.user)
+
+ 
+    return render(request, 'professor/dashboard_professor.html', {'lista_turmas':lista_turmas} )
 
 
 @login_required
@@ -229,3 +233,35 @@ def submissao_view(request, projeto_id):
         messages.error(request, "Este projeto não pode ser submetido no momento.")
         
     return redirect('dashboard_aluno')
+
+@login_required
+def painel_turma_view(request, turma_id):
+    if request.user.tipo_usuario != 2:
+        return HttpResponseForbidden()
+
+    #busca tirmas dos professores
+    turma = get_object_or_404(
+        Turma,
+        id=turma_id,
+        responsavel=request.user
+    )
+
+    # Busca projetos da turma
+    projetos = Projeto.objects.filter(
+        turma=turma,
+        submissoes__isnull=False
+    ).select_related(
+        'aluno'
+    ).distinct().order_by(
+        'aluno__first_name',
+        'aluno__username'
+)
+
+    return render(request, 'professor/painel_turma.html', {
+        'turma': turma,
+        'projetos': projetos
+    })
+
+@login_required
+def projeto_analise_view(request):
+    return render(request, "professor/projeto_aluno.html")
