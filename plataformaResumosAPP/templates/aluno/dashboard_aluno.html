@@ -14,6 +14,13 @@
         {% for inscricao in lista_inscricoes %}
             <li>
                 {{ inscricao.turma.nome_turma }}
+                
+                {% if inscricao.projeto_vinculado %}
+                    <strong>(Status: {{ inscricao.projeto_vinculado.get_status_projeto_display }})</strong>
+                {% else %}
+                    <strong>(Status: Não iniciado)</strong>
+                {% endif %}
+
                 <a href="{% url 'relatorio_projeto' inscricao.id %}">Acessar Relatório</a>
             </li>
         {% empty %}

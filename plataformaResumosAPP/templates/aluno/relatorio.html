@@ -6,6 +6,8 @@
 <body>
     <h1>Edição de Relatório</h1>
 
+    <p>Status Atual: <strong>{{ projeto.get_status_projeto_display }}</strong></p>
+
     {% if messages %}
         {% for message in messages %}
             <p><strong>{{ message }}</strong></p>
@@ -15,29 +17,45 @@
     <form method="POST">
         {% csrf_token %}
 
-        <p>Título: {{ form.titulo_projeto }}</p>
+        <fieldset {% if projeto.status_projeto != 0 and projeto.status_projeto != 3 %}disabled{% endif %}>
+            <p>Título: {{ form.titulo_projeto }}</p>
 
-        <p><strong>Programas (Selecione):</strong><br>
-        {{ form.programa }}</p>
+            <p><strong>Programas (Selecione):</strong><br>
+            {{ form.programa }}</p>
 
-        <p><strong>ODS (Selecione de 1 a 3):</strong><br>
-        {{ form.ods }}
-        {% if form.ods.errors %}
-            <span style="color: red;">{{ form.ods.errors }}</span>
-        {% endif %}
-        </p>
+            <p><strong>ODS (Selecione de 1 a 3):</strong><br>
+            {{ form.ods }}
+            {% if form.ods.errors %}
+                <span style="color: red;">{{ form.ods.errors }}</span>
+            {% endif %}
+            </p>
 
-        <p>Autores: {{ form.nome_autores }}</p>
-        <p>Objetivos:<br>{{ form.objetivos_trabalho }}</p>
-        <p>Metodologia:<br>{{ form.metodologia_projeto }}</p>
-        <p>Resultados:<br>{{ form.resultados_projeto }}</p>
-        <p>Justificativa ODS:<br>{{ form.justificativa_ods }}</p>
-        <p>Reflexão:<br>{{ form.reflexao_projeto }}</p>
-        <p>Referências:<br>{{ form.referencia_projeto }}</p>
+            <p>Autores: {{ form.nome_autores }}</p>
+            <p>Objetivos:<br>{{ form.objetivos_trabalho }}</p>
+            <p>Metodologia:<br>{{ form.metodologia_projeto }}</p>
+            <p>Resultados:<br>{{ form.resultados_projeto }}</p>
+            <p>Justificativa ODS:<br>{{ form.justificativa_ods }}</p>
+            <p>Reflexão:<br>{{ form.reflexao_projeto }}</p>
+            <p>Referências:<br>{{ form.referencia_projeto }}</p>
 
-        <button type="submit">Salvar Relatório</button>
+            {% if projeto.status_projeto == 0 or projeto.status_projeto == 3 %}
+                <button type="submit">Salvar Relatório</button>
+            {% endif %}
+        </fieldset>
     </form>
 
+    <hr>
+
+    {% if projeto.status_projeto == 0 or projeto.status_projeto == 3 %}
+        <form action="{% url 'submissao_projeto' projeto.id %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button>
+                Submeter Projeto para Análise
+            </button>
+        </form>
+    {% endif %}
+
+    <br><br>
     <a href="{% url 'dashboard_aluno' %}">Voltar</a>
 </body>
 </html>

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view
+from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view,submissao_view
 
 urlpatterns = [
     path('login/', login_view, name='login'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('criarturma/', criar_turma_view, name='criar_turma'),
     path('inscricao/', inscrever_em_turma_view, name='inscrever_em_turma'),
     path('relatorio/<int:inscricao_id>/', relatorio_view, name='relatorio_projeto'),
+    path('projeto/<int:projeto_id>/submeter/', submissao_view, name='submissao_projeto'),
 ]

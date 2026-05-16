@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS
+from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao
 from django.db import IntegrityError
 
 User = get_user_model()
@@ -51,43 +51,26 @@ def login_view(request):
                 #Redirecionamento para dashboard por tipo de usuario
                 if user.tipo_usuario == 1:
                     return redirect('dashboard_aluno')
-
                 elif user.tipo_usuario == 2:
                     return redirect('dashboard_professor')
-
                 elif user.tipo_usuario == 3:
                     return redirect('dashboard_coordenador')
-
-                else:
-                    return redirect('login')
-
             else:
-                form.add_error(
-                    None,
-                    'Usuário ou senha inválidos'
-                )
+                form.add_error(None, "Usuário ou senha incorretos.")
 
-    return render(
-        request,
-        'login.html',
-        {'form': form}
-    )
+    return render(request, 'login.html', {'form': form})
+
 
 def cadastro_view(request):
-    form = UsuarioCreationForm(request.POST or None)
-
     if request.method == 'POST':
+        form = UsuarioCreationForm(request.POST)
         if form.is_valid():
             form.save()
-
-            messages.success(request, 'Cadastro realizado com sucesso! ')
+            messages.success(request, "Cadastro realizado com sucesso! Faça o login.")
             return redirect('login')
-
-    if not form.is_valid():
-        print(form.errors)
-
+    else:
+        form = UsuarioCreationForm()
     return render(request, 'cadastro.html', {'form': form})
-
 
 
 @login_required
@@ -95,130 +78,93 @@ def dashboard_aluno(request):
     if request.user.tipo_usuario != 1:
         return HttpResponseForbidden()
     
+    # Busca as inscrições exatamente como no seu código original
     lista_inscricoes = Inscricao.objects.filter(aluno=request.user)
-    return render(request, 'aluno/dashboard_aluno.html', {'lista_inscricoes': lista_inscricoes})
+    
+
+    for inscricao in lista_inscricoes:
+        inscricao.projeto_vinculado = Projeto.objects.filter(aluno=request.user, turma=inscricao.turma).first()
+    
+    return render(request, 'aluno/dashboard_aluno.html', {
+        'lista_inscricoes': lista_inscricoes
+    })
+
 
 @login_required
 def dashboard_professor(request):
-
     if request.user.tipo_usuario != 2:
         return HttpResponseForbidden()
-
     return render(request, 'professor/dashboard_professor.html')
 
 
 @login_required
 def dashboard_coordenador(request):
-
     if request.user.tipo_usuario != 3:
         return HttpResponseForbidden()
-
     return render(request, 'coordenador/dashboard_coordenador.html')
+
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-def gerar_codigo_unico():
-
-    while True:
-
-        codigo = ''.join(
-            random.choices(
-                string.ascii_uppercase + string.digits,
-                k=6
-            )
-        )
-
-        if not Turma.objects.filter(
-            codigo_acesso=codigo
-        ).exists():
-
-            return codigo
-        
-
-@login_required
-def dashboard_professor(request):
-
-    if request.user.tipo_usuario != 2:
-        return HttpResponseForbidden()
-
-    return render(request, 'professor/dashboard_professor.html')
-
 @login_required
 def criar_turma_view(request):
-
-
     if request.user.tipo_usuario != 2:
         return HttpResponseForbidden()
 
-    try:
-        semestre_ativo = Semestre.objects.latest('id')
-
-    except Semestre.DoesNotExist:
-        return HttpResponseForbidden(
-            "Nenhum semestre cadastrado."
-        )
-
     if request.method == 'POST':
-
         form = CriacaoTurma(request.POST)
-
         if form.is_valid():
-
             turma = form.save(commit=False)
-
-            turma.responsavel = request.user
-
-            turma.semestre = semestre_ativo
-
-            turma.codigo_acesso = gerar_codigo_unico()
-
+            turma.professor = request.user
+            
+            # Gerador de codigo de acesso aleatorio com 6 digitos
+            while True:
+                codigo = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+                if not Turma.objects.filter(codigo_acesso=codigo).exists():
+                    break
+            
+            turma.codigo_acesso = codigo
             turma.save()
-
+            messages.success(request, f"Turma criada com sucesso! Código de acesso: {codigo}")
             return redirect('dashboard_professor')
-
     else:
-
         form = CriacaoTurma()
 
-    return render(
-        request,
-        'professor/criar_turma.html',
-        {'form': form}
-    )
+    return render(request, 'professor/criar_turma.html', {'form': form})
 
 
 @login_required
 def inscrever_em_turma_view(request):
+    if request.user.tipo_usuario != 1:
+        return HttpResponseForbidden()
+
     if request.method == 'POST':
         form = InscricaoEmTurma(request.POST)
         if form.is_valid():
-            codigo_acesso = form.cleaned_data['codigo_acesso']
+            codigo = form.cleaned_data['codigo_acesso']
             try:
-                turma_requerida = Turma.objects.get(codigo_acesso=codigo_acesso)
+                turma = Turma.objects.get(codigo_acesso=codigo)
                 
-                
-                if Inscricao.objects.filter(aluno=request.user, turma=turma_requerida).exists():
-                    return render(request, "aluno/ja_incrito.html", {
-                        "mensagem": "Você já está matriculado nesta turma."
-                    })
-
-                
-                Inscricao.objects.create(aluno=request.user, turma=turma_requerida)
+                # Cria a inscricao vinculando o aluno e a turma encontrada pelo codigo
+                Inscricao.objects.create(aluno=request.user, turma=turma)
+                messages.success(request, f"Inscrição realizada com sucesso na turma: {turma.nome_turma}")
                 return redirect('dashboard_aluno')
-
+                
             except Turma.DoesNotExist:
-                messages.error(request, "Código de turma inválido.")
+                messages.error(request, "Código de acesso inválido.")
+            except IntegrityError:
+                messages.error(request, "Você já está inscrito nesta turma.")
     else:
         form = InscricaoEmTurma()
-    return render(request, "aluno/inscricao_turma.html", {"form": form})
+
+    return render(request, 'aluno/inscricao_turma.html', {'form': form})
 
 
 @login_required
 def relatorio_view(request, inscricao_id):
-
     inscricao = get_object_or_404(Inscricao, id=inscricao_id, aluno=request.user)
 
     prog1, _ = Programa.objects.get_or_create(nome="Educação e Sustentabilidade")
@@ -232,7 +178,7 @@ def relatorio_view(request, inscricao_id):
         turma=inscricao.turma,
         defaults={
             'titulo_projeto': f"Projeto - {inscricao.turma.nome_turma}",
-            'nome_autores': request.user.get_full_name() or request.user.username,
+            'nome_autores': request.user.get_full_name(),
         }
     )
 
@@ -240,7 +186,13 @@ def relatorio_view(request, inscricao_id):
         projeto.programa.add(prog1)
 
     if request.method == 'POST':
+  
+        if projeto.status_projeto not in [0, 3]:
+            messages.error(request, "Este relatório não pode ser editado pois já foi submetido.")
+            return redirect('relatorio_projeto', inscricao_id=inscricao.id)
+
         form = ProjetoForm(request.POST, instance=projeto)
+        
         if form.is_valid():
             form.save()
             messages.success(request, "Dados do relatório salvos com sucesso!")
@@ -248,10 +200,32 @@ def relatorio_view(request, inscricao_id):
         else:
             messages.error(request, "Erro ao salvar. Verifique os campos (ODS: mínimo 1, máximo 3).")
     else:
- 
         form = ProjetoForm(instance=projeto)
 
     return render(request, "aluno/relatorio.html", {
         "projeto": projeto,
         "form": form
     })
+
+
+@login_required
+def submissao_view(request, projeto_id):
+    if request.user.tipo_usuario != 1:
+        return HttpResponseForbidden()
+    
+    projeto = get_object_or_404(Projeto, id=projeto_id, aluno=request.user)
+    
+   
+    if projeto.status_projeto in [0, 3]:
+        projeto.status_projeto = 1  # Define como "Em análise"
+        projeto.save()
+        
+        Submissao.objects.create(
+            projeto=projeto,
+            resultado_submissao=0
+        )
+        messages.success(request, "Projeto submetido com sucesso!")
+    else:
+        messages.error(request, "Este projeto não pode ser submetido no momento.")
+        
+    return redirect('dashboard_aluno')
