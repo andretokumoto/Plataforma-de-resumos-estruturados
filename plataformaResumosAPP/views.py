@@ -114,6 +114,7 @@ def logout_view(request):
 
 
 @login_required
+@login_required
 def criar_turma_view(request):
     if request.user.tipo_usuario != 2:
         return HttpResponseForbidden()
@@ -122,7 +123,15 @@ def criar_turma_view(request):
         form = CriacaoTurma(request.POST)
         if form.is_valid():
             turma = form.save(commit=False)
-            turma.professor = request.user
+            
+            
+            turma.responsavel = request.user
+            semestre_atual = Semestre.objects.first() 
+            if not semestre_atual:
+                messages.error(request, "Nenhum semestre cadastrado no sistema.")
+                return render(request, 'professor/criar_turma.html', {'form': form})
+            
+            turma.semestre = semestre_atual
             
             # Gerador de codigo de acesso aleatorio com 6 digitos
             while True:
