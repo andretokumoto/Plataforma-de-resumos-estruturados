@@ -8,6 +8,16 @@
 
     <p>Status Atual: <strong>{{ projeto.get_status_projeto_display }}</strong></p>
 
+
+    {% if submissao and submissao.resultado_submissao != 0 %}
+        <hr>
+        <h3>Feedback do Professor</h3>
+        <p><strong>Resultado:</strong> {{ submissao.get_resultado_submissao_display }}</p>
+        <p><strong>Feedback:</strong> {{ submissao.feedback|default:"Nenhum feedback informado." }}</p>
+        <p><strong>Data da avaliação:</strong> {{ submissao.data_submissao|date:"d/m/Y H:i" }}</p>
+        <hr>
+    {% endif %}    
+
     {% if messages %}
         {% for message in messages %}
             <p><strong>{{ message }}</strong></p>
@@ -54,6 +64,7 @@
             </button>
         </form>
     {% endif %}
+
 
     <br><br>
     <a href="{% url 'dashboard_aluno' %}">Voltar</a>

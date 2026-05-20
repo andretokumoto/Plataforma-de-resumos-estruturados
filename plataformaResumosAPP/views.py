@@ -215,9 +215,12 @@ def relatorio_view(request, inscricao_id):
     else:
         form = ProjetoForm(instance=projeto)
 
+    submissao = projeto.submissoes.order_by('-data_submissao').first()
+ 
     return render(request, "aluno/relatorio.html", {
         "projeto": projeto,
-        "form": form
+        "form": form,
+        "submissao": submissao,
     })
 
 
