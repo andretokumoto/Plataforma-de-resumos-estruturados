@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao
+from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao, Revista, ProjetoRevista
 from django.db import IntegrityError
 
 User = get_user_model()
@@ -319,4 +319,73 @@ def projeto_analise_view(request, projeto_id):
         'projeto': projeto,
         'submissao': submissao,
         'ja_avaliado': ja_avaliado,
+    })
+
+@login_required
+def turmas_coordenador_view(request):
+    if request.user.tipo_usuario != 3:
+        return HttpResponseForbidden()
+ 
+    semestres = Semestre.objects.prefetch_related('turmas').order_by('-ano', '-semestre')
+ 
+    return render(request, 'coordenador/turmas_coordenador.html', {
+        'semestres': semestres,
+    })
+ 
+ 
+@login_required
+def projetos_aprovados_view(request, turma_id):
+    if request.user.tipo_usuario != 3:
+        return HttpResponseForbidden()
+ 
+    turma = get_object_or_404(Turma, id=turma_id)
+ 
+    projetos = Projeto.objects.filter(
+        turma=turma,
+        status_projeto=2
+    ).select_related('aluno').prefetch_related('programa', 'ods')
+ 
+    revista, _ = Revista.objects.get_or_create(
+        semestre=turma.semestre,
+        defaults={'titulo': f'Revista {turma.semestre}'}
+    )
+ 
+    projetos_na_revista = set(
+        ProjetoRevista.objects.filter(revista=revista).values_list('projeto_id', flat=True)
+    )
+ 
+    if request.method == 'POST':
+        ids_selecionados = request.POST.getlist('projetos_selecionados')
+ 
+        adicionados = 0
+        for projeto_id in ids_selecionados:
+            projeto = get_object_or_404(Projeto, id=projeto_id, turma=turma, status_projeto=2)
+            _, criado = ProjetoRevista.objects.get_or_create(revista=revista, projeto=projeto)
+            if criado:
+                adicionados += 1
+ 
+        if adicionados:
+            messages.success(request, f"{adicionados} projeto(s) adicionado(s) à revista.")
+        else:
+            messages.info(request, "Os projetos selecionados já estavam na revista.")
+ 
+        return redirect('projetos_aprovados', turma_id=turma.id)
+ 
+    return render(request, 'coordenador/projetos_aprovados.html', {
+        'turma': turma,
+        'projetos': projetos,
+        'projetos_na_revista': projetos_na_revista,
+        'revista': revista,
+    })
+ 
+ 
+@login_required
+def projeto_leitura_view(request, projeto_id):
+    if request.user.tipo_usuario != 3:
+        return HttpResponseForbidden()
+ 
+    projeto = get_object_or_404(Projeto, id=projeto_id, status_projeto=2)
+ 
+    return render(request, 'coordenador/projeto_leitura.html', {
+        'projeto': projeto,
     })

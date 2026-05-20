@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projetos Aprovados</title>
+</head>
+<body>
+
+    <h1>{{ turma.nome_turma }}</h1>
+    <p>
+        <strong>Disciplina:</strong> {{ turma.disciplina }} —
+        <strong>Responsavel:</strong> {{ turma.responsavel }} —
+        <strong>Curso:</strong> {{ turma.curso }} —
+        <strong>Semestre:</strong> {{ turma.semestre }}
+    </p>
+    <p><strong>Revista do semestre:</strong> {{ revista.titulo }}</p>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <p><strong>{{ msg }}</strong></p>
+        {% endfor %}
+    {% endif %}
+
+    {% if projetos %}
+        <form method="post">
+            {% csrf_token %}
+
+            <table border="1" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th>Selecionar</th>
+                        <th>Aluno</th>
+                        <th>Título</th>
+                        <th>Na Revista</th>
+                        <th>Ler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for projeto in projetos %}
+                        <tr>
+                            <td>
+                                {% if projeto.id not in projetos_na_revista %}
+                                    <input type="checkbox" name="projetos_selecionados" value="{{ projeto.id }}">
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>{{ projeto.aluno.get_full_name|default:projeto.aluno.username }}</td>
+                            <td>{{ projeto.titulo_projeto }}</td>
+                           
+                            <td>
+                                {% if projeto.id in projetos_na_revista %}Sim{% else %}Não{% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'projeto_leitura' projeto.pk %}">Ler</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <br>
+            <button type="submit">Adicionar Selecionados à Revista</button>
+        </form>
+    {% else %}
+        <p>Nenhum projeto aprovado nesta turma.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'turmas_coordenador' %}">Voltar à lista de turmas</a>
+
+</body>
+</html>

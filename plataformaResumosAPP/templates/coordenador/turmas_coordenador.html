@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turmas por Semestre</title>
+</head>
+<body>
+
+    <h1>Turmas por Semestre</h1>
+
+    {% for semestre in semestres %}
+        <h2>{{ semestre.ano }}/{{ semestre.semestre }}º Semestre</h2>
+
+        <ul>
+            {% for turma in semestre.turmas.all %}
+                <li>
+                    {{ turma.nome_turma }} — {{ turma.disciplina }} ({{ turma.curso }})
+                    <a href="{% url 'projetos_aprovados' turma.pk %}">
+                        <button type="button">Ver Projetos Aprovados</button>
+                    </a>
+                </li>
+            {% empty %}
+                <li>Nenhuma turma neste semestre.</li>
+            {% endfor %}
+        </ul>
+    {% empty %}
+        <p>Nenhum semestre cadastrado.</p>
+    {% endfor %}
+
+    <br>
+    <a href="{% url 'dashboard_coordenador' %}">Voltar ao Dashboard</a>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ projeto.titulo_projeto }}</title>
+</head>
+<body>
+
+    <h1>{{ projeto.titulo_projeto }}</h1>
+
+    <p><strong>Aluno:</strong> {{ projeto.aluno.get_full_name|default:projeto.aluno.username }}</p>
+    <p><strong>Autores:</strong> {{ projeto.nome_autores }}</p>
+    <p><strong>Turma:</strong> {{ projeto.turma.nome_turma }} — {{ projeto.turma.semestre }}</p>
+    <p>
+        <strong>Programas:</strong>
+        {% for p in projeto.programa.all %}{{ p.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </p>
+    <p>
+        <strong>ODS:</strong>
+        {% for o in projeto.ods.all %}{{ o }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </p>
+
+    <hr>
+
+    <h2>Objetivos</h2>
+    <p>{{ projeto.objetivos_trabalho }}</p>
+
+    <h2>Metodologia</h2>
+    <p>{{ projeto.metodologia_projeto }}</p>
+
+    <h2>Resultados</h2>
+    <p>{{ projeto.resultados_projeto }}</p>
+
+    <h2>Justificativa ODS</h2>
+    <p>{{ projeto.justificativa_ods }}</p>
+
+    <h2>Reflexão</h2>
+    <p>{{ projeto.reflexao_projeto }}</p>
+
+    {% if projeto.referencia_projeto %}
+        <h2>Referências</h2>
+        <p>{{ projeto.referencia_projeto }}</p>
+    {% endif %}
+
+    <br>
+    <a href="javascript:history.back()">Voltar</a>
+
+</body>
+</html>

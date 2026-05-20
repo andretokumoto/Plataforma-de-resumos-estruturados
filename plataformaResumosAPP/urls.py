@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view,submissao_view,painel_turma_view,projeto_analise_view
+from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view,submissao_view,painel_turma_view,projeto_analise_view,turmas_coordenador_view,projetos_aprovados_view,projeto_leitura_view
 
 urlpatterns = [
     path('login/', login_view, name='login'),
@@ -14,4 +14,7 @@ urlpatterns = [
     path('projeto/<int:projeto_id>/submeter/', submissao_view, name='submissao_projeto'),
     path('painel_turma/<int:turma_id>/', painel_turma_view, name='painel_turma'),
     path('projeto_em_analise/<int:projeto_id>/', projeto_analise_view ,name='projeto_analise'),
+    path('coordenador/turmas/', turmas_coordenador_view, name='turmas_coordenador'),
+    path('coordenador/turma/<int:turma_id>/aprovados/', projetos_aprovados_view, name='projetos_aprovados'),
+    path('coordenador/projeto/<int:projeto_id>/leitura/', projeto_leitura_view, name='projeto_leitura'),
 ]
