@@ -1,14 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Projeto</title>
+    <title>Análise de Projeto</title>
 </head>
 <body>
-    <h1>Projeto do aluno a analisar</h1>
 
+    <h1>{{ projeto.titulo_projeto }}</h1>
 
-    <a href="{% url 'painel_turmas' %}">
-        Voltar ao painel
-    </a>
+    <p><strong>Aluno:</strong> {{ projeto.aluno.get_full_name|default:projeto.aluno.username }}</p>
+    <p><strong>Autores:</strong> {{ projeto.nome_autores }}</p>
+    <p><strong>Turma:</strong> {{ projeto.turma.nome_turma }}</p>
+    <p>
+        <strong>Programas:</strong>
+        {% for p in projeto.programa.all %}{{ p.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </p>
+    <p>
+        <strong>ODS:</strong>
+        {% for o in projeto.ods.all %}{{ o }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </p>
+
+    <hr>
+
+    <h2>Objetivos</h2>
+    <p>{{ projeto.objetivos_trabalho }}</p>
+
+    <h2>Metodologia</h2>
+    <p>{{ projeto.metodologia_projeto }}</p>
+
+    <h2>Resultados</h2>
+    <p>{{ projeto.resultados_projeto }}</p>
+
+    <h2>Justificativa ODS</h2>
+    <p>{{ projeto.justificativa_ods }}</p>
+
+    <h2>Reflexão</h2>
+    <p>{{ projeto.reflexao_projeto }}</p>
+
+    {% if projeto.referencia_projeto %}
+        <h2>Referências</h2>
+        <p>{{ projeto.referencia_projeto }}</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Avaliação</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <p><strong>{{ msg }}</strong></p>
+        {% endfor %}
+    {% endif %}
+
+    {% if ja_avaliado %}
+        <p><strong>Status:</strong> {{ submissao.get_resultado_submissao_display }}</p>
+        <p><strong>Feedback registrado:</strong></p>
+        <p>{{ submissao.feedback|default:"Nenhum feedback informado." }}</p>
+        <p><em>Esta submissão já foi avaliada e não pode ser alterada.</em></p>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="feedback"><strong>Feedback:</strong></label><br>
+            <textarea name="feedback" id="feedback" rows="5" cols="60"></textarea>
+            <br><br>
+            <button type="submit" name="decisao" value="1">Aprovar</button>
+            <button type="submit" name="decisao" value="2">Rejeitar</button>
+        </form>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'painel_turma' projeto.turma.pk %}">Voltar ao painel</a>
+
 </body>
 </html>

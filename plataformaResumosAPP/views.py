@@ -272,5 +272,48 @@ def painel_turma_view(request, turma_id):
     })
 
 @login_required
-def projeto_analise_view(request):
-    return render(request, "professor/projeto_aluno.html")
+def projeto_analise_view(request, projeto_id):
+    if request.user.tipo_usuario != 2:
+        return HttpResponseForbidden()
+ 
+    projeto = get_object_or_404(
+        Projeto,
+        id=projeto_id,
+        turma__responsavel=request.user
+    )
+ 
+    submissao = projeto.submissoes.order_by('-data_submissao').first()
+ 
+    if not submissao:
+        messages.error(request, "Este projeto não possui submissões.")
+        return redirect('painel_turma', turma_id=projeto.turma.id)
+ 
+    ja_avaliado = submissao.resultado_submissao != 0
+ 
+    if request.method == 'POST':
+        if ja_avaliado:
+            messages.error(request, "Esta submissão já foi avaliada e não pode ser alterada.")
+            return redirect('projeto_analise', projeto_id=projeto.id)
+ 
+        feedback = request.POST.get('feedback', '').strip()
+        decisao = request.POST.get('decisao')
+ 
+        if decisao not in ['1', '2']:
+            messages.error(request, "Decisão inválida.")
+            return redirect('projeto_analise', projeto_id=projeto.id)
+ 
+        submissao.feedback = feedback
+        submissao.resultado_submissao = int(decisao)
+        submissao.save()
+ 
+        projeto.status_projeto = 2 if decisao == '1' else 3
+        projeto.save()
+ 
+        messages.success(request, "Avaliação registrada com sucesso.")
+        return redirect('painel_turma', turma_id=projeto.turma.id)
+ 
+    return render(request, "professor/projeto_aluno.html", {
+        'projeto': projeto,
+        'submissao': submissao,
+        'ja_avaliado': ja_avaliado,
+    })

@@ -13,5 +13,5 @@ urlpatterns = [
     path('relatorio/<int:inscricao_id>/', relatorio_view, name='relatorio_projeto'),
     path('projeto/<int:projeto_id>/submeter/', submissao_view, name='submissao_projeto'),
     path('painel_turma/<int:turma_id>/', painel_turma_view, name='painel_turma'),
-    path('projeto_em_analise/',projeto_analise_view, name='projeto_analise'),
+    path('projeto_em_analise/<int:projeto_id>/', projeto_analise_view ,name='projeto_analise'),
 ]

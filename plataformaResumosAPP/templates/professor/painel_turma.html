@@ -19,6 +19,7 @@
                 <th>Aluno</th>
                 <th>Título do Projeto</th>
                 <th>Status</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -29,8 +30,13 @@
                     </td>
                     <td>{{ projeto.titulo_projeto }}</td>
                     <td>{{ projeto.get_status_projeto_display }}</td>
-
-                    <a href="{% url 'projeto_analise'%}">Entrar</a>
+                    <td>
+                        {% if projeto.status_projeto == 1 %}
+                            <a href="{% url 'projeto_analise' projeto.pk %}">Analisar</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
