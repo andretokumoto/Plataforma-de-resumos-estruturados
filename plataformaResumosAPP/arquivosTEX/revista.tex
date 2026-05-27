@@ -1,0 +1,241 @@
+\documentclass[12pt,openright,oneside,a4paper]{abntex2}
+
+% -------------------------------------------------
+% PACOTES
+% -------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{indentfirst}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{titlesec}
+
+% -------------------------------------------------
+% CONFIGURAÇÕES ABNT
+% -------------------------------------------------
+
+\OnehalfSpacing
+
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0cm}
+
+% -------------------------------------------------
+% DADOS DA PUBLICAÇÃO
+% -------------------------------------------------
+
+\titulo{NOME_DA_REVISTA}
+\autor{Universidade Federal de São Paulo - UNIFESP}
+\local{São José dos Campos}
+\data{ANO_PUBLICACAO}
+
+% -------------------------------------------------
+% INÍCIO DO DOCUMENTO
+% -------------------------------------------------
+
+\begin{document}
+
+% -------------------------------------------------
+% CAPA
+% -------------------------------------------------
+
+\begin{capa}
+
+    \center
+
+    \vspace*{2cm}
+
+    {\Large UNIVERSIDADE FEDERAL DE SÃO PAULO - UNIFESP \par}
+
+    \vspace{0.5cm}
+
+    {\large PROGRAMA PEPICT \par}
+
+    \vfill
+
+    {\ABNTEXchapterfont\bfseries\LARGE NOME_DA_REVISTA \par}
+
+    \vspace{1cm}
+
+    {\large Revista Institucional de Relatórios Acadêmicos \par}
+
+    \vfill
+
+    {\large São José dos Campos\par}
+
+    {\large ANO_PUBLICACAO \par}
+
+\end{capa}
+
+% -------------------------------------------------
+% FOLHA DE ROSTO
+% -------------------------------------------------
+
+\folhaderosto{
+
+    \begin{center}
+
+        {\Large UNIVERSIDADE FEDERAL DE SÃO PAULO - UNIFESP \par}
+
+        \vspace{0.5cm}
+
+        {\large PROGRAMA PEPICT \par}
+
+        \vspace{4cm}
+
+        {\ABNTEXchapterfont\bfseries\LARGE NOME_DA_REVISTA \par}
+
+        \vspace{2cm}
+
+    \end{center}
+
+    \hspace{.45\textwidth}
+    \begin{minipage}{.5\textwidth}
+
+        Revista institucional destinada à publicação de relatórios acadêmicos desenvolvidos por alunos vinculados às unidades curriculares e projetos do programa PEPICT.
+
+    \end{minipage}
+
+    \vfill
+
+    \begin{center}
+
+        São José dos Campos \\
+        ANO_PUBLICACAO
+
+    \end{center}
+
+}
+
+% -------------------------------------------------
+% EXPEDIENTE INSTITUCIONAL
+% -------------------------------------------------
+
+\chapter*{Informações da publicação}
+
+\thispagestyle{empty}
+
+\begin{flushleft}
+
+{\large \textbf{UNIVERSIDADE FEDERAL DE SÃO PAULO – UNIFESP}}
+
+\vspace{1cm}
+
+\textbf{Programa PEPICT}
+
+NOME_COORDENADOR_GERAL_PEPICT
+
+\vspace{0.7cm}
+
+\textbf{Coordenação Editorial}
+
+NOME_COORDENADOR_EDITORIAL
+
+\vspace{0.7cm}
+
+\textbf{Comissão Organizadora}
+
+NOME_COMISSAO
+
+\vspace{0.7cm}
+
+\textbf{Revisão}
+
+NOME_REVISAO
+
+\vspace{0.7cm}
+
+\textbf{Diagramação}
+
+NOME_DIAGRAMACAO
+
+\vspace{1.5cm}
+
+\textbf{\large NOME_DA_REVISTA}
+
+ANO_PUBLICACAO
+
+\vspace{0.5cm}
+
+ORGANIZADORES
+
+\vspace{1cm}
+
+
+
+
+
+
+
+
+\end{flushleft}
+
+\cleardoublepage
+
+% -------------------------------------------------
+% SUMÁRIO
+% -------------------------------------------------
+
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+% -------------------------------------------------
+% INTRODUÇÃO
+% -------------------------------------------------
+
+\chapter{Introdução}
+
+INTRODUCAO_REVISTA
+
+% -------------------------------------------------
+% CAPÍTULO - UNIDADE CURRICULAR
+% -------------------------------------------------
+
+\chapter{NOME_UC}
+
+% -------------------------------------------------
+% RELATÓRIO
+% -------------------------------------------------
+
+\section{TITULO_RESUMO}
+
+CONTEUDO_RESUMO
+
+% -------------------------------------------------
+% NOVO RELATÓRIO
+% -------------------------------------------------
+
+\section{TITULO_RESUMO}
+
+CONTEUDO_RESUMO
+
+% -------------------------------------------------
+% NOVA DISCIPLINA
+% -------------------------------------------------
+
+\chapter{NOME_UC}
+
+\section{TITULO_RESUMO}
+
+CONTEUDO_RESUMO
+
+% -------------------------------------------------
+% REFERÊNCIAS
+% -------------------------------------------------
+
+%\chapter*{Referências}
+
+%\addcontentsline{toc}{chapter}{Referências}
+
+%AUTOR. \textbf{Título da obra}. Cidade: Editora, ano.
+
+% -------------------------------------------------
+% CONTRA CAPA FINAL
+% -------------------------------------------------
+
+
+\end{document}
