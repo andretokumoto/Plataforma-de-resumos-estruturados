@@ -1,12 +1,14 @@
+import os
 import random
 import string
+from .topdf import to_pdf
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma, ProjetoForm
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import FileResponse, HttpResponseForbidden
 from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao, Revista, ProjetoRevista
 from django.db import IntegrityError
 
@@ -113,7 +115,6 @@ def logout_view(request):
     return redirect('login')
 
 
-@login_required
 @login_required
 def criar_turma_view(request):
     if request.user.tipo_usuario != 2:
@@ -302,7 +303,7 @@ def projeto_analise_view(request, projeto_id):
         decisao = request.POST.get('decisao')
  
         if decisao not in ['1', '2']:
-            messages.error(request, "Decisão inválida.")
+            messages.error(request, "Avaliação inválida.")
             return redirect('projeto_analise', projeto_id=projeto.id)
  
         submissao.feedback = feedback
@@ -389,3 +390,46 @@ def projeto_leitura_view(request, projeto_id):
     return render(request, 'coordenador/projeto_leitura.html', {
         'projeto': projeto,
     })
+
+
+@login_required
+def pdf_resumo_view(request, projeto_id):
+
+    if request.user.tipo_usuario == 1:
+        projeto = get_object_or_404(Projeto, id=projeto_id, aluno=request.user)
+    elif request.user.tipo_usuario == 2:
+        projeto = get_object_or_404(Projeto, id=projeto_id, turma__responsavel=request.user)
+    else:
+        return HttpResponseForbidden()
+
+
+    dados = {
+        'document_type': 'resumo',
+        'titulo_resumo': projeto.titulo_projeto,
+        'autores': projeto.nome_autores,
+        'disciplina': projeto.turma.disciplina,
+        'pepict': ', '.join(p.nome for p in projeto.programa.all()),
+        'objetivos': projeto.objetivos_trabalho,
+        'metodologia': projeto.metodologia_projeto,
+        'resultados': projeto.resultados_projeto,
+        'ods': ', '.join(str(o) for o in projeto.ods.all()),
+        'reflexao': projeto.reflexao_projeto,
+        'referencias': projeto.referencia_projeto or '',
+    }
+
+    try:
+        pdf_gerado = to_pdf(dados)
+
+        if os.path.exists(pdf_gerado):
+            response = FileResponse(open(pdf_gerado, 'rb'), as_attachment=True)
+            response['Content-Disposition'] = f'attachment; filename="resumo_{projeto.id}.pdf"'
+            os.remove(pdf_gerado)
+            return response
+
+        messages.error(request, "O arquivo PDF não foi encontrado.")
+
+    except Exception as e:
+        messages.error(request, f"Erro ao gerar o PDF: {str(e)}")
+
+ 
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard_aluno'))

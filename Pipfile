@@ -8,6 +8,16 @@ django = "*"
 django-allauth = "*"
 psycopg2-binary = "*"
 dj-database-url = "*"
+pylatex = "*"
+gunicorn = "*"
+pillow = "*"
+pandas = "*"
+numpy = "*"
+matplotlib = "*"
+jinja2 = "*"
+babel = "*"
+djangorestframework = "*"
+weasyprint = "*"
 
 [dev-packages]
 

@@ -43,6 +43,12 @@
 
     <hr>
 
+    <a href="{% url 'pdf_resumo' projeto.id %}">
+        <button type="button">Baixar PDF do Resumo</button>
+    </a>
+
+    <hr>
+
     <h2>Avaliação</h2>
 
     {% if messages %}

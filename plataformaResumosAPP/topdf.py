@@ -1,0 +1,83 @@
+import subprocess
+import os
+import uuid
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def _open_template(template_path):
+    with open(template_path, 'r') as f:
+        return f.read()
+
+
+def _salva_arquivo(output_path, conteudo):
+    with open(output_path, 'w') as f:
+        f.write(conteudo)
+
+
+def to_tex(dados):
+    """
+    Gera o arquivo .tex preenchido com os dados fornecidos.
+    Retorna o caminho do arquivo .tex gerado.
+    """
+    document_type = dados.get('document_type')
+
+    temp_dir = os.path.join(BASE_DIR, 'arquivos_temp')
+    os.makedirs(temp_dir, exist_ok=True)
+
+    output_path = os.path.join(temp_dir, f"{uuid.uuid4().hex}.tex")
+
+    if document_type == 'resumo':
+        template_path = os.path.join(BASE_DIR, 'arquivosTEX', 'resumo.tex')
+
+        
+        doc_gerado = _open_template(template_path)
+        doc_gerado = doc_gerado.replace('_TITULO_RESUMO_',  dados.get('titulo_resumo', ''))
+        doc_gerado = doc_gerado.replace('_AUTORES_',        dados.get('autores', ''))
+        doc_gerado = doc_gerado.replace('_DISCIPLINA_',     dados.get('disciplina', ''))
+        doc_gerado = doc_gerado.replace('_PROGRAMA_PEPICT_',dados.get('pepict', ''))
+        doc_gerado = doc_gerado.replace('_OBJETIVOS_',      dados.get('objetivos', ''))
+        doc_gerado = doc_gerado.replace('_METODOLOGIA_',    dados.get('metodologia', ''))
+        doc_gerado = doc_gerado.replace('_RESULTADOS_',     dados.get('resultados', ''))
+        doc_gerado = doc_gerado.replace('_ODS_',            dados.get('ods', ''))
+        doc_gerado = doc_gerado.replace('_REFLEXAO_',       dados.get('reflexao', ''))
+        doc_gerado = doc_gerado.replace('_REFERENCIAS_',    dados.get('referencias', ''))
+
+        _salva_arquivo(output_path, doc_gerado)
+
+    else:
+        raise ValueError(f"Tipo de documento desconhecido: {document_type}")
+
+    return output_path
+
+
+def to_pdf(dados):
+    """
+    Compila o .tex gerado por to_tex e retorna o caminho do PDF.
+    """
+    tex_path = to_tex(dados)
+    output_dir = os.path.dirname(tex_path)
+    pdf_path = tex_path.replace('.tex', '.pdf')
+
+    try:
+        result = subprocess.run(
+            ['pdflatex', '-interaction=nonstopmode', '-output-directory', output_dir, tex_path],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"pdflatex falhou:\nstdout: {e.stdout.decode()}\nstderr: {e.stderr.decode()}"
+        )
+
+    if not os.path.exists(pdf_path):
+        raise FileNotFoundError("O arquivo PDF não foi gerado. Verifique o .tex e o log.")
+
+    # Remove arquivos auxiliares gerados pelo pdflatex
+    for ext in ('.aux', '.log', '.out'):
+        aux = tex_path.replace('.tex', ext)
+        if os.path.exists(aux):
+            os.remove(aux)
+
+    return pdf_path
