@@ -1,26 +1,41 @@
-# Base image
-FROM python:3.12-slim
+# Usa uma imagem oficial do Python baseada em Debian (slim)
+FROM python:3.11-slim
 
-# Atualiza os pacotes e instala dependências do LaTeX, incluindo o pacote de idioma português
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-xetex \
-    texlive-lang-portuguese \   
-    && rm -rf /var/lib/apt/lists/*
-
-## Copie o requirements.txt
-COPY requirements.txt /app/requirements.txt
-
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Instale as dependências usando o pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Evita que o Python escreva arquivos .pyc e ativa o buffer de saída
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-EXPOSE 8000
+# Instala dependências do sistema: compiladores, ferramentas de PDF e o ambiente LaTeX completo com ABNT
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    # Dependências comuns para geração de PDFs (como wkhtmltopdf/pango se seu pacote precisar)
+    wkhtmltopdf \
+    xvfb \
+    # Instalação do LaTeX e pacotes de suporte (inclui o abnt2 e textlive)
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-lang-portuguese \
+    texlive-fonts-recommended \
+    # Limpeza para reduzir o tamanho da imagem Docker
+    && rm -rf /var/lib/apt/lists/*
 
-# Copie o restante do seu código para o contêiner
+# Instala o pipenv
+RUN pip install --no-cache-dir pipenv
+
+# Copia os arquivos de dependências do Python
+COPY Pipfile Pipfile.lock /app/
+
+# Instala as dependências do Pipenv no escopo do sistema do container
+RUN pipenv install --system --deploy
+
+# Copia o restante do código do projeto
 COPY . /app/
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "FormataiBackEnd.wsgi:application"]
+# Executa migrações, coleta estáticos e inicia o servidor
+CMD python manage.py migrate && \
+    python manage.py collectstatic --noinput && \
+    gunicorn nome_do_seu_projeto.wsgi:application --bind 0.0.0.0:$PORT
