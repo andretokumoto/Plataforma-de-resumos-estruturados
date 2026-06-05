@@ -1,184 +1,131 @@
 \documentclass[12pt,openright,oneside,a4paper]{report}
 
 % -------------------------------------------------
-% PACOTES
+% PACOTES E DIRETRIZES DA ABNT
 % -------------------------------------------------
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
-\usepackage{lmodern}
 \usepackage{indentfirst}
 \usepackage{microtype}
 \usepackage{setspace}
 \usepackage{graphicx}
-\usepackage{titlesec}
 
-% -------------------------------------------------
-% CONFIGURAÇÕES DE ESPAÇAMENTO
-% -------------------------------------------------
+% Margens Oficiais da ABNT
+\usepackage[top=3cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+
+% Fonte Arial / Helvetica para sumário e títulos limpos
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
 
 \onehalfspacing
-
 \setlength{\parindent}{1.25cm}
 \setlength{\parskip}{0cm}
 
 % -------------------------------------------------
 % DADOS DA PUBLICAÇÃO
 % -------------------------------------------------
-
 \title{NOME_DA_REVISTA}
 \author{Universidade Federal de São Paulo - UNIFESP}
 \date{ANO_PUBLICACAO}
 
-% -------------------------------------------------
-% INÍCIO DO DOCUMENTO
-% -------------------------------------------------
-
 \begin{document}
 
 % -------------------------------------------------
-% CAPA (Customizada para a classe report)
+% CAPA
 % -------------------------------------------------
-
 \begin{titlepage}
-
     \centering
-
     \vspace*{2cm}
-
     {\Large UNIVERSIDADE FEDERAL DE SÃO PAULO - UNIFESP \par}
-
     \vspace{0.5cm}
-
     {\large PROGRAMA PEPICT \par}
-
     \vfill
-
     {\bfseries\LARGE NOME_DA_REVISTA \par}
-
     \vspace{1cm}
-
     {\large Revista Institucional de Relatórios Acadêmicos \par}
-
     \vfill
-
     {\large São José dos Campos\par}
-
     {\large ANO_PUBLICACAO \par}
-
 \end{titlepage}
 
 % -------------------------------------------------
 % FOLHA DE ROSTO
 % -------------------------------------------------
-
 \begin{titlepage}
-
     \centering
-
     {\Large UNIVERSIDADE FEDERAL DE SÃO PAULO - UNIFESP \par}
-
     \vspace{0.5cm}
-
     {\large PROGRAMA PEPICT \par}
-
     \vspace{4cm}
-
     {\bfseries\LARGE NOME_DA_REVISTA \par}
-
     \vspace{2cm}
-
     \hspace{.45\textwidth}
     \begin{minipage}{.5\textwidth}
-        \fontfamily{cmr}\selectfont
-        Revista institucional destinada à publicação de relatórios acadêmicos 
-        desenvolvidos por alunos vinculados às unidades curriculares e projetos do programa PEPICT.
+        \onehalfspacing
+        Revista institucional destinada à publicação de relatórios acadêmicos desenvolvidos por alunos vinculados às unidades curriculares e projetos do programa PEPICT.
     \end{minipage}
-
     \vfill
-
     \begin{center}
         São José dos Campos \\
         ANO_PUBLICACAO
     \end{center}
-
 \end{titlepage}
 
 % -------------------------------------------------
 % EXPEDIENTE INSTITUCIONAL
 % -------------------------------------------------
-
 \chapter*{Informações da publicação}
-
 \thispagestyle{empty}
 
 \begin{flushleft}
-
 {\large \textbf{UNIVERSIDADE FEDERAL DE SÃO PAULO – UNIFESP}}
-
 \vspace{1cm}
 
-\textbf{Programa PEPICT}
-
+\textbf{Programa PEPICT} \\
 NOME_COORDENADOR_GERAL_PEPICT
-
 \vspace{0.7cm}
 
-\textbf{Coordenação Editorial}
-
+\textbf{Coordenação Editorial} \\
 NOME_COORDENADOR_EDITORIAL
-
 \vspace{0.7cm}
 
-\textbf{Comissão Organizadora}
-
+\textbf{Comissão Organizadora} \\
 NOME_COMISSAO
-
 \vspace{0.7cm}
 
-\textbf{Revisão}
-
+\textbf{Revisão} \\
 NOME_REVISAO
-
 \vspace{0.7cm}
 
-\textbf{Diagramação}
-
+\textbf{Diagramação} \\
 NOME_DIAGRAMACAO
-
 \vspace{1.5cm}
 
-\textbf{\large NOME_DA_REVISTA}
-
+\textbf{\large NOME_DA_REVISTA} \\
 ANO_PUBLICACAO
-
 \vspace{0.5cm}
 
 ORGANIZADORES
-
-\vspace{1cm}
-
 \end{flushleft}
-
 \clearpage
 
 % -------------------------------------------------
 % SUMÁRIO
 % -------------------------------------------------
-
 \tableofcontents
 \clearpage
 
 % -------------------------------------------------
-% CONTEÚDO
+% INTRODUÇÃO
 % -------------------------------------------------
-
 \chapter{Introdução}
-
 _INTRODUCAO_REVISTA_
+\clearpage
 
-
+% -------------------------------------------------
+% CONTEÚDO DINÂMICO DOS CAPÍTULOS
+% -------------------------------------------------
 _CONTEUDO_REVISTA_
 
 \end{document}
