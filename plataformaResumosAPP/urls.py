@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view,submissao_view,painel_turma_view,projeto_analise_view,turmas_coordenador_view,projetos_aprovados_view,projeto_leitura_view,pdf_resumo_view
+from .views import login_view,cadastro_view,dashboard_aluno,dashboard_professor,dashboard_coordenador,logout_view ,criar_turma_view,inscrever_em_turma_view,relatorio_view,submissao_view,painel_turma_view,projeto_analise_view,turmas_coordenador_view,projetos_aprovados_view,projeto_leitura_view,pdf_resumo_view, gera_revista_view
 
 urlpatterns = [
     path('login/', login_view, name='login'),
@@ -17,5 +17,6 @@ urlpatterns = [
     path('coordenador/turmas/', turmas_coordenador_view, name='turmas_coordenador'),
     path('coordenador/turma/<int:turma_id>/aprovados/', projetos_aprovados_view, name='projetos_aprovados'),
     path('coordenador/projeto/<int:projeto_id>/leitura/', projeto_leitura_view, name='projeto_leitura'),
-    path('projeto/<int:projeto_id>/pdf/', pdf_resumo_view, name='pdf_resumo'),  # <-- novo
+    path('projeto/<int:projeto_id>/pdf/', pdf_resumo_view, name='pdf_resumo'), 
+    path('coordenador/revista/<int:revista_id>/pdf/', gera_revista_view, name='pdf_revista'),
 ]

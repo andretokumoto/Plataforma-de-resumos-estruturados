@@ -45,6 +45,22 @@ def to_tex(dados):
 
         _salva_arquivo(output_path, doc_gerado)
 
+    elif document_type == 'revista':
+
+        template_path = os.path.join(BASE_DIR, 'arquivosTEX', 'revista.tex')
+        caminho_temp_capitulos = os.path.join(BASE_DIR, 'arquivos_temp', 'conteudo_revista.txt')
+
+        # pega conteudo dos capitulos
+        with open(caminho_temp_capitulos, "r", encoding="utf-8") as arquivo:
+            capitulos = arquivo.read()
+
+        doc_gerado = _open_template(template_path)
+        doc_gerado = doc_gerado.replace('NOME_DA_REVISTA',  dados.get('titulo_revista', 'titulo da revista'))
+        doc_gerado = doc_gerado.replace('ANO_PUBLICACAO',  str(dados.get('data', 'DATA'))) # Forçado para string caso venha objeto datetime
+        doc_gerado = doc_gerado.replace('_CONTEUDO_REVISTA_', capitulos )
+
+        _salva_arquivo(output_path, doc_gerado)
+        
     else:
         raise ValueError(f"Tipo de documento desconhecido: {document_type}")
 

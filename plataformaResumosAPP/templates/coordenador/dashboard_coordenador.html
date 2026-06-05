@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <title>Dashboard Coordenador</title>
 </head>
 <body>
@@ -9,10 +10,43 @@
     <p>Você está logado como Coordenador.</p>
 
     <a href="{% url 'turmas_coordenador' %}">
-        <button type="button">Ver Projetos Aprovados</button>
+        <button type="button">Ver Turmas e Projetos Aprovados</button>
     </a>
 
     <br><br>
+
+    {% if revistas %}
+        <h2>Revistas</h2>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Revista</th>
+                    <th>Semestre</th>
+                    <th>Projetos</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for revista in revistas %}
+                    <tr>
+                        <td>{{ revista.titulo }}</td>
+                        <td>{{ revista.semestre }}</td>
+                        <td>{{ revista.projetos_revista.count }}</td>
+                        <td>
+                            {% if revista.projetos_revista.count > 0 %}
+                                <a href="{% url 'pdf_revista' revista.id %}">
+                                    <button type="button">Gerar PDF da Revista</button>
+                                </a>
+                            {% else %}
+                                Sem projetos ainda.
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    {% endif %}
 
     <a href="{% url 'logout' %}">
         <button type="button">Logout</button>

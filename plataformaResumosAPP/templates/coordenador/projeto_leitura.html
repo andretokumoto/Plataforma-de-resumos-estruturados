@@ -1,48 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <title>{{ projeto.titulo_projeto }}</title>
 </head>
 <body>
 
+    <p><a href="{% url 'projetos_aprovados' %}">&larr; Voltar para a lista</a></p>
+    
     <h1>{{ projeto.titulo_projeto }}</h1>
+    <p><em>Por: {{ projeto.nome_autores }}</em></p>
 
-    <p><strong>Aluno:</strong> {{ projeto.aluno.get_full_name|default:projeto.aluno.username }}</p>
-    <p><strong>Autores:</strong> {{ projeto.nome_autores }}</p>
-    <p><strong>Turma:</strong> {{ projeto.turma.nome_turma }} — {{ projeto.turma.semestre }}</p>
-    <p>
-        <strong>Programas:</strong>
-        {% for p in projeto.programa.all %}{{ p.nome }}{% if not forloop.last %}, {% endif %}{% endfor %}
-    </p>
-    <p>
-        <strong>ODS:</strong>
-        {% for o in projeto.ods.all %}{{ o }}{% if not forloop.last %}, {% endif %}{% endfor %}
-    </p>
+    <ul>
+        <li><strong>Unidade Curricular:</strong> {{ projeto.turma.disciplina }}</li>
+        <li><strong>Curso de Graduação:</strong> {{ projeto.turma.curso }}</li>
+        <li><strong>Semestre Letivo:</strong> {{ projeto.turma.semestre.nome_semestre }}</li>
+    </ul>
 
     <hr>
 
-    <h2>Objetivos</h2>
-    <p>{{ projeto.objetivos_trabalho }}</p>
+    <h3>Objetivos do Trabalho</h3>
+    <p>{{ projeto.objetivos_trabalho|linebreaks }}</p>
 
-    <h2>Metodologia</h2>
-    <p>{{ projeto.metodologia_projeto }}</p>
+    <h3>Metodologia do Projeto</h3>
+    <p>{{ projeto.metodologia_projeto|linebreaks }}</p>
 
-    <h2>Resultados</h2>
-    <p>{{ projeto.resultados_projeto }}</p>
+    <h3>Resultados Obtidos</h3>
+    <p>{{ projeto.resultados_projeto|linebreaks }}</p>
 
-    <h2>Justificativa ODS</h2>
-    <p>{{ projeto.justificativa_ods }}</p>
+    <h3>Justificativa e Alinhamento com as ODS</h3>
+    <p>{{ projeto.justificativa_ods|linebreaks }}</p>
 
-    <h2>Reflexão</h2>
-    <p>{{ projeto.reflexao_projeto }}</p>
+    <h3>Reflexão Crítica</h3>
+    <p>{{ projeto.reflexao_projeto|linebreaks }}</p>
 
-    {% if projeto.referencia_projeto %}
-        <h2>Referências</h2>
-        <p>{{ projeto.referencia_projeto }}</p>
-    {% endif %}
-
-    <br>
-    <a href="javascript:history.back()">Voltar</a>
+    <h3>Referências Bibliográficas</h3>
+    <p>{{ projeto.referencia_projeto|linebreaks }}</p>
 
 </body>
 </html>

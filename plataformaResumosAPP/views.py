@@ -107,7 +107,12 @@ def dashboard_professor(request):
 def dashboard_coordenador(request):
     if request.user.tipo_usuario != 3:
         return HttpResponseForbidden()
-    return render(request, 'coordenador/dashboard_coordenador.html')
+    
+    revistas = Revista.objects.all()
+    
+    return render(request, 'coordenador/dashboard_coordenador.html', {
+        'revistas': revistas
+    })
 
 
 def logout_view(request):
@@ -433,3 +438,106 @@ def pdf_resumo_view(request, projeto_id):
 
  
     return redirect(request.META.get('HTTP_REFERER', 'dashboard_aluno'))
+
+
+def gera_capitulos(revista_id): 
+
+    temp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'arquivos_temp')
+    os.makedirs(temp_dir, exist_ok=True)
+
+    caminho_temp_capitulos = os.path.join(temp_dir, "conteudo_revista.txt")
+
+    revista = get_object_or_404(Revista, pk=revista_id)
+
+    # Limpa o arquivo no início (começa do zero)
+    with open(caminho_temp_capitulos, "w", encoding="utf-8") as arquivo:
+        arquivo.write("")
+
+    turmas = Turma.objects.filter(semestre=revista.semestre)
+
+    for turma in turmas:
+
+        # FAZ A LEITURA DA TURMA (Corrigido o + "\n")
+        with open(caminho_temp_capitulos, "a", encoding="utf-8") as arquivo:
+            arquivo.write(fr"\chapter{{{turma.disciplina}}}" + "\n\n")
+
+        # faz a leitura de cada projeto na turma
+        projetos = Projeto.objects.filter(turma=turma)
+
+        # faz o apendice de cada resumo
+        for projeto in projetos:
+
+            programas_vinculados = ", ".join([p.nome for p in projeto.programa.all()])
+
+            with open(caminho_temp_capitulos, "a", encoding="utf-8") as arquivo:
+                arquivo.write(fr"\section{{{projeto.titulo_projeto}}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Autores}}" + "\n" + f"{projeto.nome_autores}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Disciplina e Curso}}" + "\n" + f"{turma.curso}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Programa PEPICT vinculado}}" + "\n" + f"{programas_vinculados}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Objetivos}}" + "\n" + f"{projeto.objetivos_trabalho}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+            
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Metodologia}}" + "\n" + f"{projeto.metodologia_projeto}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Resultados e Produtos}}" + "\n" + f"{projeto.resultados_projeto}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Relação com os ODS}}" + "\n" + f"{projeto.justificativa_ods}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Reflexão Crítica}}" + "\n" + f"{projeto.reflexao_projeto}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+                arquivo.write(fr"\noindent" + "\n")
+                arquivo.write(fr"\textbf{{Referências}}" + "\n" + f"{projeto.referencia_projeto}" + "\n\n")
+                arquivo.write(fr"\vspace{{0.7cm}}" + "\n")
+
+@login_required
+def gera_revista_view(request, revista_id):
+    if request.user.tipo_usuario != 3:
+        return HttpResponseForbidden()
+
+    # Executa a escrita sequencial no arquivo txt
+    gera_capitulos(revista_id)
+    
+    revista = get_object_or_404(Revista, pk=revista_id)
+    data_formatada = revista.data_criacao.strftime('%d/%m/%Y')
+
+    dados = {
+        'document_type': 'revista',
+        'titulo_revista': revista.titulo,
+        'data': data_formatada,
+    }
+
+    try:
+        pdf_gerado = to_pdf(dados)
+
+        if os.path.exists(pdf_gerado):
+            response = FileResponse(open(pdf_gerado, 'rb'), as_attachment=True)
+            response['Content-Disposition'] = f'attachment; filename="resumo_{revista.id}.pdf"'
+
+            return response
+
+        messages.error(request, "O arquivo PDF não foi encontrado.")
+
+    except Exception as e:
+        messages.error(request, f"Erro ao gerar o PDF: {str(e)}")
+
+ 
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard_coordenador'))

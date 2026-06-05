@@ -1,0 +1,378 @@
+\chapter{Arquitetura e Organização de Computadores}
+
+\section{Projeto - Panda}
+\noindent
+\textbf{Autores}
+Ana Carolina
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Tecnologia e Inovação para o Desenvolvimento Social
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+muitos
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+o que eu quiser
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+funcionou
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+é aquilo né
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+refletido
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+ual
+
+\vspace{0.7cm}
+\section{Projeto - Panda}
+\noindent
+\textbf{Autores}
+Aluno teste2
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+None
+
+\vspace{0.7cm}
+\chapter{Sistemas Embarcados}
+
+\section{reenvio}
+\noindent
+\textbf{Autores}
+Ana Carolina
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+Objetivos do projeto
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+metodologia do projeto
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+resultados do projeto
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+porque sim
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+A definir
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+aquelas
+
+\vspace{0.7cm}
+\section{Novo Projeto}
+\noindent
+\textbf{Autores}
+eu
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade, Tecnologia e Inovação para o Desenvolvimento Social
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+obsetivos teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+metodologia teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+resultados teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+osd teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+refleti bastante
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+SILVA, Maurício Samy. Criando sites com HTML: sites de alta qualidade com HTML e CSS . Novatec Editora, 2008.
+
+\vspace{0.7cm}
+\section{Sistema de detecção de parede}
+\noindent
+\textbf{Autores}
+carolina Silva
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade, Tecnologia e Inovação para o Desenvolvimento Social
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+Aqueles objetivos lá
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+Aquela mesma
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+Deu certo mesmo
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+Achei que sim
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+Refleti bastante
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+minha cabeça
+
+\vspace{0.7cm}
+\section{Projeto - Embarcados}
+\noindent
+\textbf{Autores}
+Gertrudes Felesmina
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+None
+
+\vspace{0.7cm}
+\section{Titulo do projeto}
+\noindent
+\textbf{Autores}
+Aluno Teste2,Aluno 2
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+Engenharia de Computação
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade, Tecnologia e Inovação para o Desenvolvimento Social
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+objetivos teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+metodologia teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+resultados teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+justificativa teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+reflexao teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+referencia teste
+referencia teste 2
+
+\vspace{0.7cm}
+\chapter{UC teste}
+
+\chapter{UC teste 2}
+
+\section{Titulo do projeto}
+\noindent
+\textbf{Autores}
+Aluno teste2, aluno 2, aluno 3
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+BCT
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+objetivo teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+metodologia teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+resultado teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+justifcativa teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+reflexao teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+referencia teste
+referencia teste 2
+
+\vspace{0.7cm}
