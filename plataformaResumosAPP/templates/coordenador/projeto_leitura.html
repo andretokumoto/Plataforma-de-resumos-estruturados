@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <p><a href="{% url 'projetos_aprovados' %}">&larr; Voltar para a lista</a></p>
+    <p><a href="{% url 'projetos_aprovados' projeto.turma.id %}">&larr; Voltar para a lista</a></p>
     
     <h1>{{ projeto.titulo_projeto }}</h1>
     <p><em>Por: {{ projeto.nome_autores }}</em></p>
@@ -36,6 +36,16 @@
 
     <h3>Referências Bibliográficas</h3>
     <p>{{ projeto.referencia_projeto|linebreaks }}</p>
+
+    {% if request.user.tipo_usuario == 3 %}
+        <form action="{% url 'projetos_aprovados' projeto.turma.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="projetos_selecionados" value="{{ projeto.id }}">
+            <button type="submit">Adicionar à Revista</button>
+        </form>
+    {% endif %}
+
+
 
 </body>
 </html>
