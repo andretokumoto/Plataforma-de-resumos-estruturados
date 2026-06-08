@@ -53,8 +53,6 @@ class Semestre(models.Model):
         return f'{self.ano}/{self.semestre}'
 
 
-
-
 class Programa(models.Model):
 
     nome = models.CharField(
@@ -64,8 +62,6 @@ class Programa(models.Model):
 
     def __str__(self):
         return self.nome
-
-
 
 
 class ODS(models.Model):

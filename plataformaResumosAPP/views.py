@@ -3,9 +3,8 @@ import random
 import string
 from .topdf import to_pdf
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma, ProjetoForm
-from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponseForbidden
@@ -139,7 +138,6 @@ def criar_turma_view(request):
             
             turma.semestre = semestre_atual
             
-            # Gerador de codigo de acesso aleatorio com 6 digitos
             while True:
                 codigo = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
                 if not Turma.objects.filter(codigo_acesso=codigo).exists():
@@ -167,7 +165,6 @@ def inscrever_em_turma_view(request):
             try:
                 turma = Turma.objects.get(codigo_acesso=codigo)
                 
-                # Cria a inscricao vinculando o aluno e a turma encontrada pelo codigo
                 Inscricao.objects.create(aluno=request.user, turma=turma)
                 messages.success(request, f"Inscrição realizada com sucesso na turma: {turma.nome_turma}")
                 return redirect('dashboard_aluno')
@@ -239,7 +236,7 @@ def submissao_view(request, projeto_id):
     
    
     if projeto.status_projeto in [0, 3]:
-        projeto.status_projeto = 1  # Define como "Em análise"
+        projeto.status_projeto = 1  
         projeto.save()
         
         Submissao.objects.create(
@@ -257,14 +254,14 @@ def painel_turma_view(request, turma_id):
     if request.user.tipo_usuario != 2:
         return HttpResponseForbidden()
 
-    #busca tirmas dos professores
+    #busca turmas do professor conectado
     turma = get_object_or_404(
         Turma,
         id=turma_id,
         responsavel=request.user
     )
 
-    # Busca projetos da turma
+    # Busca projetos da turma encontrada
     projetos = Projeto.objects.filter(
         turma=turma,
         submissoes__isnull=False
@@ -457,14 +454,14 @@ def gera_capitulos(revista_id):
 
     for turma in turmas:
 
-        # FAZ A LEITURA DA TURMA (Corrigido o + "\n")
+        
         with open(caminho_temp_capitulos, "a", encoding="utf-8") as arquivo:
             arquivo.write(fr"\chapter{{{turma.disciplina}}}" + "\n\n")
 
-        # faz a leitura de cada projeto na turma
+        
         projetos = Projeto.objects.filter(turma=turma)
 
-        # faz o apendice de cada resumo
+        
         for projeto in projetos:
 
             programas_vinculados = ", ".join([p.nome for p in projeto.programa.all()])
@@ -517,7 +514,7 @@ def gera_revista_view(request, revista_id):
     gera_capitulos(revista_id)
     
     revista = get_object_or_404(Revista, pk=revista_id)
-    data_formatada = revista.data_criacao.strftime('%d/%m/%Y')
+    data_formatada = revista.data_criacao.strftime('%Y')
 
     dados = {
         'document_type': 'revista',

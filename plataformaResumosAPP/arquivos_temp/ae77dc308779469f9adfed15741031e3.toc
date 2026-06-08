@@ -15,3 +15,5 @@
 \contentsline {section}{\numberline {5.1}Titulo do projeto}{12}%
 \contentsline {section}{\numberline {5.2}projeto PEPICT teste}{12}%
 \contentsline {chapter}{\numberline {6}Banco de dados}{15}%
+\contentsline {chapter}{\numberline {7}UC teste 2}{16}%
+\contentsline {section}{\numberline {7.1}Projeto - turma teste}{16}%
