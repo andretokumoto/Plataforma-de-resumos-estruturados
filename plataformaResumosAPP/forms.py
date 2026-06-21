@@ -117,3 +117,13 @@ class ProjetoForm(forms.ModelForm):
         if quantidade < 1 or quantidade > 3:
             raise forms.ValidationError("Você deve selecionar entre 1 e 3 ODS.")
         return ods_selecionadas
+    
+class BuscaUsuarioForm(forms.Form):
+    username = forms.CharField(
+        label='Buscar por nome de usuário',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite o username...'
+        })
+    )

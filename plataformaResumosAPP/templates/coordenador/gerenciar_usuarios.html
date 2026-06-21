@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Usuários</title>
+</head>
+<body>
+
+    <h1>Gerenciar Tipos de Usuários</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="GET">
+        <label for="id_username">Buscar usuário:</label>
+        {{ form.username }}
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    {% if usuarios %}
+        <table border="1" style="margin-top: 20px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Tipo Atual</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.username }}</td>
+                        <td>
+                            {% if usuario.tipo_usuario == 1 %}
+                                Aluno
+                            {% elif usuario.tipo_usuario == 2 %}
+                                Professor
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                                {% if usuario.tipo_usuario == 1 %}
+                                    <button type="submit">Mudar para Professor</button>
+                                {% else %}
+                                    <button type="submit">Mudar para Aluno</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        {% if request.GET.username %}
+            <p>Nenhum usuário encontrado.</p>
+        {% endif %}
+    {% endif %}
+
+    <p><a href="{% url 'dashboard_coordenador' %}">&larr; Voltar ao Dashboard</a></p>
+
+
+</body>
+</html>

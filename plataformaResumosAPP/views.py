@@ -4,11 +4,11 @@ import string
 from .topdf import to_pdf
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma, ProjetoForm
+from .forms import LoginForm, UsuarioCreationForm, CriacaoTurma, InscricaoEmTurma, ProjetoForm,BuscaUsuarioForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponseForbidden
-from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao, Revista, ProjetoRevista
+from .models import Turma, Semestre, Inscricao, Projeto, Programa, ODS, Submissao, Revista, ProjetoRevista,Usuario
 from django.db import IntegrityError
 
 User = get_user_model()
@@ -538,3 +538,42 @@ def gera_revista_view(request, revista_id):
 
  
     return redirect(request.META.get('HTTP_REFERER', 'dashboard_coordenador'))
+
+@login_required
+def gerencia_tipo_usuario_view(request):
+
+    if request.user.tipo_usuario != 3:
+        return HttpResponseForbidden()
+
+    form = BuscaUsuarioForm(request.GET or None)
+    usuarios = Usuario.objects.none()    
+
+    if form.is_valid() and form.cleaned_data.get('username'):
+        username_busca = form.cleaned_data.get('username')
+
+        usuarios = Usuario.objects.filter(
+            username__icontains=username_busca,
+            tipo_usuario__in=[1, 2]
+        )
+
+    if request.method == 'POST':
+            usuario_id = request.POST.get('usuario_id')
+            usuario_foco = get_object_or_404(Usuario, id=usuario_id)
+
+            if usuario_foco.tipo_usuario == 1:
+                usuario_foco.tipo_usuario = 2 
+                menssagem = f"O usuário {usuario_foco.username} agora é Professor(a)."
+            elif usuario_foco.tipo_usuario == 2:
+                usuario_foco.tipo_usuario = 1 
+                menssagem = f"O usuário {usuario_foco.username} agora é Aluno(a)."
+            
+            usuario_foco.save()
+            messages.success(request, menssagem)
+            
+            
+            return redirect(f"{request.path}?username={request.GET.get('username', '')}")
+
+    return render(request, 'coordenador/gerenciar_usuarios.html', {
+        'form': form,
+        'usuarios': usuarios
+    })
