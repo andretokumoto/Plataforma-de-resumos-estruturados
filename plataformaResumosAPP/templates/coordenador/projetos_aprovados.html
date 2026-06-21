@@ -8,8 +8,8 @@
 
     <p><a href="{% url 'dashboard_coordenador' %}">&larr; Voltar ao Dashboard</a></p>
     
-    <h1>Banco de Projetos Aprovados</h1>
-    <p>Abaixo constam as submissões homologadas aptas para compor as edições das revistas.</p>
+    <h1>Banco de Resumos Aprovados</h1>
+    <p>Abaixo constam as submissões homologadas aptas para compor as edições dos Cadernos de Resumos.</p>
 
     {% if projetos %}
         <ul>
@@ -30,7 +30,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>Não existem projetos aprovados no sistema até o momento.</p>
+        <p>Não existem Resumos aprovados no sistema até o momento.</p>
     {% endif %}
 
 </body>
