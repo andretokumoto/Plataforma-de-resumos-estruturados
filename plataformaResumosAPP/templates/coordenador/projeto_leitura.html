@@ -45,7 +45,9 @@
         </form>
     {% endif %}
 
-
+    <a href="{% url 'pdf_resumo' projeto.id %}">
+        <button type="button">Baixar PDF do Resumo</button>
+    </a>
 
 </body>
 </html>
