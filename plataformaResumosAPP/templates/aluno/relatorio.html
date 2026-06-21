@@ -28,10 +28,14 @@
         {% csrf_token %}
 
         <fieldset {% if projeto.status_projeto != 0 and projeto.status_projeto != 3 %}disabled{% endif %}>
-            <p>Título: {{ form.titulo_projeto }}</p>
+            <p>
+                Título: {{ form.titulo_projeto }}<br>
+                <small>Preencha com as informações referentes ao trabalho desenvolvido em sua disciplina com componente de extensão vinculada aos Programas PEPICT.</small>
+            </p>
 
             <p><strong>Programas (Selecione):</strong><br>
-            {{ form.programa }}</p>
+            {{ form.programa }}<br>
+            <small>Escolha o programa PEPICT correspondente.</small></p>
 
             <p><strong>ODS (Selecione de 1 a 3):</strong><br>
             {{ form.ods }}
@@ -40,13 +44,40 @@
             {% endif %}
             </p>
 
-            <p>Autores: {{ form.nome_autores }}</p>
-            <p>Objetivos:<br>{{ form.objetivos_trabalho }}</p>
-            <p>Metodologia:<br>{{ form.metodologia_projeto }}</p>
-            <p>Resultados:<br>{{ form.resultados_projeto }}</p>
-            <p>Justificativa ODS:<br>{{ form.justificativa_ods }}</p>
-            <p>Reflexão:<br>{{ form.reflexao_projeto }}</p>
-            <p>Referências:<br>{{ form.referencia_projeto }}</p>
+            <p>
+                Autores: {{ form.nome_autores }}<br>
+                <small>Nome completo dos(as) estudantes e docente(s) responsável (eis).</small>
+            </p>
+            
+            <p>
+                Objetivos:<br>{{ form.objetivos_trabalho }}<br>
+                <small>Descreva o objetivo geral da atividade e o contexto/motivação.</small>
+            </p>
+            
+            <p>
+                Metodologia:<br>{{ form.metodologia_projeto }}<br>
+                <small>Explique as etapas do trabalho e como se deu a interação com a comunidade (ou justifique a proposta, caso não tenha interação).</small>
+            </p>
+            
+            <p>
+                Resultados:<br>{{ form.resultados_projeto }}<br>
+                <small>Liste os produtos gerados (protótipos, oficinas, relatórios, etc.) e os resultados alcançados.</small>
+            </p>
+            
+            <p>
+                Justificativa ODS:<br>{{ form.justificativa_ods }}<br>
+                <small>Indique até 3 ODS trabalhados e justifique como o trabalho contribuiu com cada um deles.</small>
+            </p>
+            
+            <p>
+                Reflexão:<br>{{ form.reflexao_projeto }}<br>
+                <small>Relate os principais aprendizados, desafios e percepções sobre a extensão universitária.</small>
+            </p>
+            
+            <p>
+                Referências:<br>{{ form.referencia_projeto }}<br>
+                <small>Inclua as fontes bibliográficas utilizadas (formato ABNT).</small>
+            </p>
 
             {% if projeto.status_projeto == 0 or projeto.status_projeto == 3 %}
                 <button type="submit">Salvar Relatório</button>
@@ -66,11 +97,5 @@
     {% endif %}
 
     {# Botão disponível assim que o projeto existir (qualquer status) #}
-    <a href="{% url 'pdf_resumo' projeto.id %}">
-        <button type="button">Baixar PDF do Resumo</button>
-    </a>
-
-    <br><br>
-    <a href="{% url 'dashboard_aluno' %}">Voltar</a>
 </body>
 </html>
