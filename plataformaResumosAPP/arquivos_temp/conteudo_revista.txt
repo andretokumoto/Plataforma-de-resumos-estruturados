@@ -1,5 +1,6 @@
 \chapter{Arquitetura e Organização de Computadores}
 
+\newpage
 \section{Projeto - Panda}
 \noindent
 \textbf{Autores}
@@ -46,6 +47,7 @@ refletido
 ual
 
 \vspace{0.7cm}
+\newpage
 \section{Projeto - Panda}
 \noindent
 \textbf{Autores}
@@ -92,6 +94,7 @@ Educação e Sustentabilidade
 None
 
 \vspace{0.7cm}
+\newpage
 \section{titulo do trabalho}
 \noindent
 \textbf{Autores}
@@ -140,6 +143,7 @@ A metodologia ágil é uma abordagem de desenvolvimento que visa criar um fluxo 
 \vspace{0.7cm}
 \chapter{Sistemas Embarcados}
 
+\newpage
 \section{reenvio}
 \noindent
 \textbf{Autores}
@@ -186,6 +190,7 @@ A definir
 aquelas
 
 \vspace{0.7cm}
+\newpage
 \section{Novo Projeto}
 \noindent
 \textbf{Autores}
@@ -232,6 +237,7 @@ refleti bastante
 SILVA, Maurício Samy. Criando sites com HTML: sites de alta qualidade com HTML e CSS . Novatec Editora, 2008.
 
 \vspace{0.7cm}
+\newpage
 \section{Sistema de detecção de parede}
 \noindent
 \textbf{Autores}
@@ -278,6 +284,7 @@ Refleti bastante
 minha cabeça
 
 \vspace{0.7cm}
+\newpage
 \section{Projeto - Embarcados}
 \noindent
 \textbf{Autores}
@@ -324,6 +331,7 @@ Educação e Sustentabilidade
 None
 
 \vspace{0.7cm}
+\newpage
 \section{Titulo do projeto}
 \noindent
 \textbf{Autores}
@@ -375,6 +383,7 @@ referencia teste 2
 
 \chapter{UC teste 2}
 
+\newpage
 \section{Titulo do projeto}
 \noindent
 \textbf{Autores}
@@ -422,6 +431,7 @@ referencia teste
 referencia teste 2
 
 \vspace{0.7cm}
+\newpage
 \section{projeto PEPICT teste}
 \noindent
 \textbf{Autores}
@@ -521,8 +531,56 @@ Unifesp. São Paulo: Unifesp, 2024. Disponível em: <https://www.unifesp.br>. Ac
 \vspace{0.7cm}
 \chapter{Banco de dados}
 
+\newpage
+\section{Projeto - projeto 3}
+\noindent
+\textbf{Autores}
+Aluno Teste2
+
+\vspace{0.7cm}
+\noindent
+\textbf{Disciplina e Curso}
+BCT
+
+\vspace{0.7cm}
+\noindent
+\textbf{Programa PEPICT vinculado}
+Educação e Sustentabilidade
+
+\vspace{0.7cm}
+\noindent
+\textbf{Objetivos}
+teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Metodologia}
+teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Resultados e Produtos}
+teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Relação com os ODS}
+teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Reflexão Crítica}
+teste
+
+\vspace{0.7cm}
+\noindent
+\textbf{Referências}
+teste
+
+\vspace{0.7cm}
 \chapter{UC teste 2}
 
+\newpage
 \section{Projeto - turma teste}
 \noindent
 \textbf{Autores}

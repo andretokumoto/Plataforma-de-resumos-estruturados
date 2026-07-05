@@ -467,6 +467,7 @@ def gera_capitulos(revista_id):
             programas_vinculados = ", ".join([p.nome for p in projeto.programa.all()])
 
             with open(caminho_temp_capitulos, "a", encoding="utf-8") as arquivo:
+                arquivo.write(fr"\newpage" + "\n")
                 arquivo.write(fr"\section{{{projeto.titulo_projeto}}}" + "\n")
 
                 arquivo.write(fr"\noindent" + "\n")

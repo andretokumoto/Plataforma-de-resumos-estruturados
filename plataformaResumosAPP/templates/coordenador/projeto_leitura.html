@@ -41,7 +41,7 @@
         <form action="{% url 'projetos_aprovados' projeto.turma.id %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="projetos_selecionados" value="{{ projeto.id }}">
-            <button type="submit">Adicionar à Revista</button>
+            <button type="submit">Adicionar ao caderno de resumos</button>
         </form>
     {% endif %}
 

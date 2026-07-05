@@ -20,11 +20,11 @@
     <br><br>
 
     {% if revistas %}
-        <h2>Revistas</h2>
+        <h2>Caderno de Resumos</h2>
         <table border="1" cellpadding="5">
             <thead>
                 <tr>
-                    <th>Revista</th>
+                    <th>Caderno de Resumos</th>
                     <th>Semestre</th>
                     <th>Projetos</th>
                     <th>Ação</th>
@@ -39,7 +39,7 @@
                         <td>
                             {% if revista.projetos_revista.count > 0 %}
                                 <a href="{% url 'pdf_revista' revista.id %}">
-                                    <button type="button">Gerar PDF da Revista</button>
+                                    <button type="button">Gerar PDF do Caderno de resumos</button>
                                 </a>
                             {% else %}
                                 Sem Resumos ainda.
