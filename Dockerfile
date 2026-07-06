@@ -1,5 +1,5 @@
 # Usa uma imagem oficial do Python baseada em Debian (slim)
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
