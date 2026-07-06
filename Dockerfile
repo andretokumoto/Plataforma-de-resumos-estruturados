@@ -35,7 +35,12 @@ RUN pipenv install --system --deploy
 # Copia o restante do código do projeto
 COPY . /app/
 
+# Torna o entrypoint executável
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 # Executa migrações, coleta estáticos e inicia o servidor
 CMD python manage.py migrate && \
     python manage.py collectstatic --noinput && \
-    gunicorn nome_do_seu_projeto.wsgi:application --bind 0.0.0.0:$PORT
+    gunicorn plataformaResumosAPI.wsgi:application --bind 0.0.0.0:$PORT

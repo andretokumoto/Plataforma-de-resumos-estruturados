@@ -1,0 +1,28 @@
+# fly.toml - gerado/ajustado para o projeto plataformaResumosAPI
+# Ajuste "app" para o nome que o `fly launch` sugerir/você escolher
+
+app = "plataforma-resumos"
+primary_region = "gru"  # São Paulo
+
+[build]
+
+[env]
+  PORT = "8080"
+  DATABASE_URL = "sqlite:////app/data/db.sqlite3"
+  # Defina o restante dos secrets sensíveis via `fly secrets set`, não aqui:
+  # SECRET_KEY, etc.
+
+[mounts]
+  source = "dados"
+  destination = "/app/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
