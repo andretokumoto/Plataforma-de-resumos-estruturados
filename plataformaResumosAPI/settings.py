@@ -39,6 +39,14 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://plataforma-resumos.fly.dev',
+]
+
+# O Fly.io termina o HTTPS na borda e repassa a requisição por HTTP internamente;
+# isso avisa o Django que a conexão original era segura
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Application definition
 
