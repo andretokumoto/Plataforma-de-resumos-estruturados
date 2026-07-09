@@ -8,7 +8,7 @@ SEED_PATH="/app/db.sqlite3.seed"
 # Garante que a pasta do volume existe
 mkdir -p "$DB_DIR"
 
-# Se o volume ainda não tem banco (primeiro deploy), semeia com o banco atual do repositório
+
 if [ ! -f "$DB_PATH" ]; then
     if [ -f "$SEED_PATH" ]; then
         echo "Nenhum banco encontrado no volume. Semeando com db.sqlite3.seed..."

@@ -8,7 +8,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Instala dependências do sistema: compiladores, ferramentas de PDF e o ambiente LaTeX completo com ABNT
+# Instala dependências do sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     wget \
@@ -20,12 +20,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     texlive-latex-extra \
     texlive-lang-portuguese \
     texlive-fonts-recommended \
-    # wkhtmltopdf saiu dos repositorios do Debian (projeto arquivado);
-    # instala o .deb estatico oficial direto do GitHub
     && wget -q https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb -O /tmp/wkhtmltox.deb \
     && apt-get install -y --no-install-recommends /tmp/wkhtmltox.deb \
     && rm /tmp/wkhtmltox.deb \
-    # Limpeza para reduzir o tamanho da imagem Docker
     && rm -rf /var/lib/apt/lists/*
 
 # Instala o pipenv
