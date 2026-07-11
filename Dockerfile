@@ -1,5 +1,5 @@
 # Usa uma imagem oficial do Python baseada em Debian (slim)
-FROM python:3.12-slim
+FROM python:3.12-slim 
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     texlive-latex-extra \
     texlive-lang-portuguese \
     texlive-fonts-recommended \
+    texlive-fonts-extra \
     && wget -q https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb -O /tmp/wkhtmltox.deb \
     && apt-get install -y --no-install-recommends /tmp/wkhtmltox.deb \
     && rm /tmp/wkhtmltox.deb \
